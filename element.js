@@ -1,9 +1,9 @@
 function Element(ElementType, I) {
   ElementType.prototype = this;
 
-  this.sprite = new Sprite(ElementType.sprite);
-  this.x = 0;
-  this.y = 0;
+  this.sprite = I.sprite || {};
+  this.x = I.x || 0;
+  this.y = I.y || 0;
 
   this.update = function() {
     this.sprite.update();
