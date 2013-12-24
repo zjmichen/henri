@@ -29,8 +29,8 @@ function Stage(canvas, I) {
     window.clearInterval(priv.mainLoop);
   };
 
-  this.addElement = function(ElementType, layer) {
-    var element = new Element(ElementType);
+  this.addElement = function(ElementType, I, layer) {
+    var element = new Element(ElementType, I);
     layer = layer || 0;
 
     layers[layer].elements.push(element);
@@ -51,7 +51,11 @@ function Stage(canvas, I) {
   };
 
   var draw = function() {
+    bufMain.clearRect(0, 0, width, height);
+
     layers.forEach(function(layer) {
+      layer.buffer.clearRect(0, 0, layer.width, layer.height);
+
       layer.elements.forEach(function(elem) {
         layer.buffer.drawImage(elem.render(), elem.x, elem.y);
       });
@@ -59,6 +63,7 @@ function Stage(canvas, I) {
       bufMain.drawImage(layer.buffer.canvas, 0, 0);
     });
 
+    ctxMain.clearRect(0, 0, width, height);
     ctxMain.drawImage(bufMain.canvas, 0, 0);
   };
 }
