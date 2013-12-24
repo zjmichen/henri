@@ -28,4 +28,9 @@ function Sprite(I) {
       buffer.drawImage(modes[mode][modeFrame], 0, 0);
     }
   };
+
+  this.addSource = function(modeName, buffer) {
+    modes[modeName] = modes[modeName] || [];
+    modes[modeName].append(buffer);
+  };
 }
