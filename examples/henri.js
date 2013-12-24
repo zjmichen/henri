@@ -13,6 +13,8 @@ function Element(ElementType) {
   ElementType.prototype = this;
 
   this.sprite = new Sprite(ElementType.sprite);
+  this.x = 0;
+  this.y = 0;
 
   this.update = function() {
     this.sprite.update();
@@ -110,7 +112,8 @@ function Stage(canvas, I) {
     window.clearInterval(priv.mainLoop);
   };
 
-  this.addElement = function(element, layer) {
+  this.addElement = function(ElementType, layer) {
+    var element = new Element(ElementType);
     layer = layer || 0;
 
     layers[layer].elements.push(element);
@@ -133,14 +136,12 @@ function Stage(canvas, I) {
   var draw = function() {
     layers.forEach(function(layer) {
       layer.elements.forEach(function(elem) {
-        ctxMain.drawImage(elem.render(), elem.x, elem.y);
+        layer.buffer.drawImage(elem.render(), elem.x, elem.y);
       });
 
       bufMain.drawImage(layer.buffer.canvas, 0, 0);
     });
 
-    ctxMain.fillStyle = 'black';
-    ctxMain.fillRect(0, 0, 100, 100);
     ctxMain.drawImage(bufMain.canvas, 0, 0);
   };
 }
