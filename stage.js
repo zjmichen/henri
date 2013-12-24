@@ -29,8 +29,8 @@ function Stage(canvas, I) {
     window.clearInterval(priv.mainLoop);
   };
 
-  this.addElement = function(prototype, layer) {
-    var element = new Element(prototype);
+  this.addElement = function(ElementType, layer) {
+    var element = new Element(ElementType);
     layer = layer || 0;
 
     layers[layer].elements.push(element);
