@@ -31,6 +31,7 @@ function Stage(canvas, I) {
 
   this.addElement = function(prototype, layer) {
     var element = new Element(prototype);
+    layer = layer || 0;
 
     layers[layer].elements.push(element);
     element.removeFromStage = function() {
