@@ -29,7 +29,8 @@ function Layer(width, height) {
 }
 function Sprite(I) {
   I = I || {};
-  var width = I.width || 10
+  var that = this
+    , width = I.width || 10
     , height = I.height || 10
     , buffer = new Buffer(width, height)
     , mode = 'normal'
@@ -43,25 +44,36 @@ function Sprite(I) {
   this.setMode = function(m) {
     mode = m;
     modeFrame = 0;
-    buffer.drawImage(this.modes[mode][modeFrame], 0, 0);
+    buffer = this.modes[mode][modeFrame];
   };
 
   this.getImage = function() {
-    return buffer.canvas;
+    return buffer;
   };
 
   this.update = function() {
     frame = frame++ % frameSkip;
 
     if (frame === 0) {
-      modeFrame = modeFrame++ % this.modes[mode].length;
-      buffer.drawImage(this.modes[mode][modeFrame], 0, 0);
+      modeFrame = (modeFrame + 1) % this.modes[mode].length;
+      buffer = this.modes[mode][modeFrame];
     }
   };
 
   this.addSource = function(modeName, buffer) {
     this.modes[modeName] = this.modes[modeName] || [];
     this.modes[modeName].push(buffer);
+  };
+
+  this.addSourcesByUrl = function(modeName, urls) {
+    this.modes[modeName] = this.modes[modeName] || [];
+    urls.forEach(function(url) {
+      var img = new Image();
+      img.addEventListener('load', function() {
+        that.addSource(modeName, img);
+      });
+      img.src = url;
+    });
   };
 }
 function Stage(canvas, I) {

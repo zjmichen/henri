@@ -9,13 +9,13 @@ window.onload = function() {
   var canvas = document.getElementById('counter')
     , ctx = canvas.getContext('2d');
 
-  var img = new Image();
-  img.addEventListener('load', function() {
-    s.addSource('normal', img);
-    s.update();
-    ctx.drawImage(s.getImage(), 0, 0);
-  }, false);
-  img.src = 'book.bmp';
+  s.addSourcesByUrl('normal', ['explosion1.png', 'explosion2.png']);
 
+  window.setInterval(function() {
+    s.update();
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, 300, 150);
+    ctx.drawImage(s.getImage(), 0, 0);
+  }, 100);
 
 };
