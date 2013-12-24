@@ -122,12 +122,12 @@ function Stage(canvas, I) {
   var draw = function() {
     layers.forEach(function(layer) {
       layer.elements.forEach(function(elem) {
-        layer.ctx.drawImage(elem.render(), elem.x, elem.y);
+        layer.buffer.drawImage(elem.render(), elem.x, elem.y);
       });
 
-      bufMain.drawImage(layer.ctx.canvas, 0, 0);
+      bufMain.drawImage(layer.buffer.canvas, 0, 0);
     });
 
-    ctxMain.drawImage(bufMain, 0, 0);
+    ctxMain.drawImage(bufMain.canvas, 0, 0);
   };
 }
