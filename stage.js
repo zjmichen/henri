@@ -13,6 +13,8 @@ function Stage(canvas, I) {
     , i
     ;
 
+  this.frameCount = 0;
+
   for (i = 0; i < numLayers; i++) {
     layers.push(new Layer(width, height));
   }
@@ -22,6 +24,7 @@ function Stage(canvas, I) {
     priv.mainLoop = window.setInterval(function() {
       update();
       draw();
+      that.frameCount++;
     }, delay);
   };
 
