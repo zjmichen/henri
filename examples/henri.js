@@ -44,12 +44,12 @@ function Sprite(I) {
     , frameSkip = 30
     ;
 
-  this.modes = I.modes || {'normal': []};
+  modes = I.modes || {'normal': []};
 
   this.setMode = function(m) {
     mode = m;
     modeFrame = 0;
-    buffer = this.modes[mode][modeFrame];
+    buffer = modes[mode][modeFrame];
   };
 
   this.getImage = function() {
@@ -58,20 +58,20 @@ function Sprite(I) {
 
   this.update = function() {
     if (frame === 0) {
-      modeFrame = (modeFrame + 1) % this.modes[mode].length;
-      buffer = this.modes[mode][modeFrame];
+      modeFrame = (modeFrame + 1) % modes[mode].length;
+      buffer = modes[mode][modeFrame];
     }
 
     frame = (frame + 1) % frameSkip;
   };
 
   this.addSource = function(modeName, buffer) {
-    this.modes[modeName] = this.modes[modeName] || [];
-    this.modes[modeName].push(buffer);
+    modes[modeName] = modes[modeName] || [];
+    modes[modeName].push(buffer);
   };
 
   this.addSourcesByUrl = function(modeName, urls) {
-    this.modes[modeName] = this.modes[modeName] || [];
+    modes[modeName] = modes[modeName] || [];
     urls.forEach(function(url) {
       var img = new Image();
       img.addEventListener('load', function() {
@@ -96,6 +96,8 @@ function Stage(canvas, I) {
     , i
     ;
 
+  this.frameCount = 0;
+
   for (i = 0; i < numLayers; i++) {
     layers.push(new Layer(width, height));
   }
@@ -105,6 +107,7 @@ function Stage(canvas, I) {
     priv.mainLoop = window.setInterval(function() {
       update();
       draw();
+      that.frameCount++;
     }, delay);
   };
 

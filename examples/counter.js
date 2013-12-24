@@ -5,9 +5,17 @@ window.onload = function() {
   var stage = new Stage(canvas);
   stage.addElement(Explosion, {x: 0, y: 0});
   stage.addElement(Explosion, {x: 50, y: 0});
-  stage.addElement(Explosion, {x: 100, y: 0});
+  var e = stage.addElement(Explosion, {x: 100, y: 0});
+
+
+  e.update = function() {
+    this.sprite.update();
+    this.y += 0.5*Math.sin(0.01*stage.frameCount);
+    this.x += 0.5*Math.cos(0.01*stage.frameCount);
+  };
 
   stage.start();
+
 };
 
 function Explosion(I) {
