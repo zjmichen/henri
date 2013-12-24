@@ -1,12 +1,15 @@
-function Element(prototype) {
-  this.prototype = prototype;
-  sprite = new Sprite(prototype.sprite);
+function Element(ElementType) {
+  ElementType.prototype = this;
+
+  this.sprite = new Sprite(ElementType.sprite);
 
   this.update = function() {
-    sprite.update();
+    this.sprite.update();
   };
 
   this.render = function() {
-    return sprite.getImage();
+    return this.sprite.getImage();
   };
+
+  return new ElementType();
 }
