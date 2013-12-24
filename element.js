@@ -1,4 +1,4 @@
-function Element(ElementType) {
+function Element(ElementType, I) {
   ElementType.prototype = this;
 
   this.sprite = new Sprite(ElementType.sprite);
@@ -13,5 +13,5 @@ function Element(ElementType) {
     return this.sprite.getImage();
   };
 
-  return new ElementType();
+  return new ElementType(I);
 }
