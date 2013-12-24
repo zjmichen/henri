@@ -32,13 +32,13 @@ function Sprite(I) {
   var width = I.width || 10
     , height = I.height || 10
     , buffer = new Buffer(width, height)
-    , mode = 'default'
+    , mode = 'normal'
     , modeFrame = 0
     , frame = 0
     , frameSkip = 3
     ;
 
-  this.modes = I.modes || {'default': []};
+  this.modes = I.modes || {'normal': []};
 
   this.setMode = function(m) {
     mode = m;
@@ -54,17 +54,14 @@ function Sprite(I) {
     frame = frame++ % frameSkip;
 
     if (frame === 0) {
-      console.log(this.modes['default'].length);
-      //modeFrame = modeFrame++ % this.modes[mode].length;
-      //buffer.drawImage(this.modes[mode][modeFrame], 0, 0);
+      modeFrame = modeFrame++ % this.modes[mode].length;
+      buffer.drawImage(this.modes[mode][modeFrame], 0, 0);
     }
   };
 
   this.addSource = function(modeName, buffer) {
     this.modes[modeName] = this.modes[modeName] || [];
     this.modes[modeName].push(buffer);
-    console.log(modeName);
-    console.log(this.modes[modeName].length);
   };
 }
 function Stage(canvas, I) {

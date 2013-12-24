@@ -1,47 +1,21 @@
-function Counter(canvas) {
-  this.stage = new Stage(canvas);
-
-  var digits = []
-    , i
-    , digitEl = new DigitElement()
-    ;
-
-  for (i = 0; i < 4; i++) {
-    digit = this.stage.addElement(digitEl);
-    digit.x = digit.width * i;
-    digit.y = 0;
-  }
-}
-
-function DigitElement() {
-  var i, buffer
-    , width = 100
-    , height = 100
-    , sprite = new Sprite({
-        width: width,
-        height: height
-      })
-    ;
-
-  for (i = 0; i < 10; i++) {
-    buffer = new Buffer(width, height);
-    buffer.fillStyle = 'white';
-    buffer.fillRect(0, 0, width, height);
-
-    buffer.textAlign = 'center';
-    buffer.textBaseline = 'middle';
-    buffer.font = 'sans-serif';
-    buffer.fillStyle = 'black';
-    buffer.fillText(i, width * 0.5, height * 0.5);
-
-    sprite.addSource('default', buffer);
-  }
-}
-
 window.onload = function() {
-  var canvas = document.getElementById('counter')
-    , counter = new Counter(canvas);
+  console.log("Hello!");
 
-  counter.stage.start();
-  console.log("Started!");
+  var s = new Sprite({
+    width: 100,
+    height: 100
+  });
+
+  var canvas = document.getElementById('counter')
+    , ctx = canvas.getContext('2d');
+
+  var img = new Image();
+  img.addEventListener('load', function() {
+    s.addSource('normal', img);
+    s.update();
+    ctx.drawImage(s.getImage(), 0, 0);
+  }, false);
+  img.src = 'book.bmp';
+
+
 };
