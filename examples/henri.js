@@ -9,7 +9,7 @@ function Buffer(width, height) {
   return buffer.getContext('2d');
 }
 
-function Element(ElementType) {
+function Element(ElementType, I) {
   ElementType.prototype = this;
 
   this.sprite = new Sprite(ElementType.sprite);
@@ -24,7 +24,7 @@ function Element(ElementType) {
     return this.sprite.getImage();
   };
 
-  return new ElementType();
+  return new ElementType(I);
 }
 function Layer(width, height) {
   this.buffer = new Buffer(width, height);
@@ -41,7 +41,7 @@ function Sprite(I) {
     , mode = 'normal'
     , modeFrame = 0
     , frame = 0
-    , frameSkip = 3
+    , frameSkip = 30
     ;
 
   this.modes = I.modes || {'normal': []};
@@ -57,12 +57,12 @@ function Sprite(I) {
   };
 
   this.update = function() {
-    frame = frame++ % frameSkip;
-
     if (frame === 0) {
       modeFrame = (modeFrame + 1) % this.modes[mode].length;
       buffer = this.modes[mode][modeFrame];
     }
+
+    frame = (frame + 1) % frameSkip;
   };
 
   this.addSource = function(modeName, buffer) {
@@ -112,8 +112,8 @@ function Stage(canvas, I) {
     window.clearInterval(priv.mainLoop);
   };
 
-  this.addElement = function(ElementType, layer) {
-    var element = new Element(ElementType);
+  this.addElement = function(ElementType, I, layer) {
+    var element = new Element(ElementType, I);
     layer = layer || 0;
 
     layers[layer].elements.push(element);
@@ -134,7 +134,11 @@ function Stage(canvas, I) {
   };
 
   var draw = function() {
+    bufMain.clearRect(0, 0, width, height);
+
     layers.forEach(function(layer) {
+      layer.buffer.clearRect(0, 0, layer.width, layer.height);
+
       layer.elements.forEach(function(elem) {
         layer.buffer.drawImage(elem.render(), elem.x, elem.y);
       });
@@ -142,6 +146,7 @@ function Stage(canvas, I) {
       bufMain.drawImage(layer.buffer.canvas, 0, 0);
     });
 
+    ctxMain.clearRect(0, 0, width, height);
     ctxMain.drawImage(bufMain.canvas, 0, 0);
   };
 }
