@@ -1,5 +1,5 @@
 function Counter(canvas) {
-  this.prototype = new Stage(canvas);
+  this.stage = new Stage(canvas);
 
   var digits = []
     , i
@@ -7,7 +7,7 @@ function Counter(canvas) {
     ;
 
   for (i = 0; i < 4; i++) {
-    digit = stage.addElement(digitEl);
+    digit = this.stage.addElement(digitEl);
     digit.x = digit.width * i;
     digit.y = 0;
   }
@@ -42,5 +42,6 @@ window.onload = function() {
   var canvas = document.getElementById('counter')
     , counter = new Counter(canvas);
 
-  counter.start();
+  counter.stage.start();
+  console.log("Started!");
 };
