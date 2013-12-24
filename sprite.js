@@ -7,7 +7,7 @@ function Sprite(I) {
     , mode = 'normal'
     , modeFrame = 0
     , frame = 0
-    , frameSkip = 3
+    , frameSkip = 30
     ;
 
   this.modes = I.modes || {'normal': []};
@@ -23,12 +23,12 @@ function Sprite(I) {
   };
 
   this.update = function() {
-    frame = frame++ % frameSkip;
-
     if (frame === 0) {
       modeFrame = (modeFrame + 1) % this.modes[mode].length;
       buffer = this.modes[mode][modeFrame];
     }
+
+    frame = (frame + 1) % frameSkip;
   };
 
   this.addSource = function(modeName, buffer) {
