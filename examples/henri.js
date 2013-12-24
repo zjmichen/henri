@@ -9,17 +9,20 @@ function Buffer(width, height) {
   return buffer.getContext('2d');
 }
 
-function Element(prototype) {
-  this.prototype = prototype;
-  sprite = new Sprite(prototype.sprite);
+function Element(ElementType) {
+  ElementType.prototype = this;
+
+  this.sprite = new Sprite(ElementType.sprite);
 
   this.update = function() {
-    sprite.update();
+    this.sprite.update();
   };
 
   this.render = function() {
-    return sprite.getImage();
+    return this.sprite.getImage();
   };
+
+  return new ElementType();
 }
 function Layer(width, height) {
   this.buffer = new Buffer(width, height);
@@ -107,8 +110,7 @@ function Stage(canvas, I) {
     window.clearInterval(priv.mainLoop);
   };
 
-  this.addElement = function(prototype, layer) {
-    var element = new Element(prototype);
+  this.addElement = function(element, layer) {
     layer = layer || 0;
 
     layers[layer].elements.push(element);
@@ -131,12 +133,14 @@ function Stage(canvas, I) {
   var draw = function() {
     layers.forEach(function(layer) {
       layer.elements.forEach(function(elem) {
-        layer.buffer.drawImage(elem.render(), elem.x, elem.y);
+        ctxMain.drawImage(elem.render(), elem.x, elem.y);
       });
 
       bufMain.drawImage(layer.buffer.canvas, 0, 0);
     });
 
+    ctxMain.fillStyle = 'black';
+    ctxMain.fillRect(0, 0, 100, 100);
     ctxMain.drawImage(bufMain.canvas, 0, 0);
   };
 }
