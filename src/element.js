@@ -1,7 +1,7 @@
 function Element(ElementType, I) {
   ElementType.prototype = this;
 
-  this.sprite = I.sprite || {};
+  this.sprite = I.sprite || new Sprite();
   this.x = I.x || 0;
   this.y = I.y || 0;
 
