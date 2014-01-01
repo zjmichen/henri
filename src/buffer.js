@@ -4,9 +4,11 @@
  * GPLv3
  */
 function Buffer(width, height) {
-  var buffer = document.createElement('canvas');
-  buffer.width = width;
-  buffer.height = height;
-  return buffer.getContext('2d');
+  return (function(width, height) {
+    var buffer = document.createElement('canvas');
+    buffer.width = width;
+    buffer.height = height;
+    return buffer.getContext('2d');
+  })(width, height);
 }
 

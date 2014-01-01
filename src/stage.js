@@ -32,11 +32,27 @@ function Stage(canvas, I) {
     window.clearInterval(priv.mainLoop);
   };
 
-  this.addElement = function(ElementType, I, layer) {
-    var element = new Element(ElementType, I);
-    layer = layer || 0;
+  this.addElement = function(ElementSpec, I, layer) {
+    var element;
 
+    var ElementConstructor = function() {
+      var prop;
+      for (prop in I) {
+        this[prop] = I[prop];
+      }
+
+      this.init(I);
+    };
+
+    ElementConstructor.prototype = new Element(ElementSpec);
+    ElementConstructor.prototype.constructor = ElementConstructor;
+
+    element = new ElementConstructor(I);
+    console.log(element);
+
+    layer = (typeof layer === 'undefined') ? 0 : layer;
     layers[layer].elements.push(element);
+
     element.removeFromStage = function() {
       layers[layer].elements.splice(
           layers[layer].elements.indexOf(element), 1);
