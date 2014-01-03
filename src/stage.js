@@ -13,6 +13,7 @@ function Stage(canvas, I) {
     , i
     ;
 
+  canvas.contentEditable = true;
   this.frameCount = 0;
 
   for (i = 0; i < numLayers; i++) {
@@ -26,6 +27,8 @@ function Stage(canvas, I) {
       draw();
       that.frameCount++;
     }, delay);
+
+    canvas.focus();
   };
 
   this.stop = function() {
@@ -57,6 +60,13 @@ function Stage(canvas, I) {
       layers[layer].elements.splice(
           layers[layer].elements.indexOf(element), 1);
     };
+
+    if (element.handlers) {
+      for (type in element.handlers) {
+        console.log(element.handlers[type]);
+        canvas.addEventListener(type, element.handlers[type]);
+      }
+    }
 
     return element;
   };
