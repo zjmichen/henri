@@ -12,22 +12,20 @@ var Sprite = (function() {
     this.skipFrames = 3;
 
     this.setMode = function(m) {
-      if (modes.hasOwnProperty(m)) {
-        mode = m;
-        frame = 0;
-      }
+      mode = m;
+      frame = 0;
     };
 
     this.update = function() {
       skips = (skips + 1) % this.skipFrames;
 
-      if (skips === 0 && modes[mode].length > 0) {
+      if (skips === 0 && modes[mode] && modes[mode].length > 0) {
         frame = (frame + 1) % modes[mode].length;
       }
     };
 
     this.render = function() {
-      if (modes[mode].length > 0) {
+      if (modes[mode] && modes[mode].length > 0) {
         return modes[mode][frame];
       } else {
         return blankBuffer.canvas;
@@ -37,11 +35,14 @@ var Sprite = (function() {
     this.addImage = function(mode, url) {
       var img = new Image();
 
+      if (modes[mode] === undefined) {
+        modes[mode] = [];
+      }
+
       img.addEventListener('load', function() {
         modes[mode].push(img);
       });
       img.src = url;
-
     };
   };
 

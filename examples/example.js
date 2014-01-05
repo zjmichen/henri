@@ -10,8 +10,11 @@ window.onload = function() {
   f.scale = 0.5;
 
   f.update = function() {
+    this.sprite.update();
     this.scale += 0.005*Math.sin(0.05*this.stage.frame);
   };
+
+  f.sprite.setMode('thrusting');
 
   s.start();
 
@@ -19,9 +22,12 @@ window.onload = function() {
 }
 
 var Ship = function() {
-  var sprite = new Sprite(this.width, this.height);
+  this.sprite = new Sprite(this.width, this.height);
 
-  sprite.addImage('normal', 'ship_normal.png');
+  this.sprite.addImage('normal', 'ship_normal.png');
+  this.sprite.addImage('thrusting', 'ship_fire1.png');
+  this.sprite.addImage('thrusting', 'ship_fire2.png');
+  this.sprite.addImage('thrusting', 'ship_fire3.png');
 
   this.type = 'ship';
   this.x = 250;
@@ -30,10 +36,10 @@ var Ship = function() {
   this.height = 64;
 
   this.update = function() {
-    sprite.update();
+    this.sprite.update();
   };
 
   this.render = function() {
-    return sprite.render();
+    return this.sprite.render();
   };
 };
