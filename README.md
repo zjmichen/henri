@@ -6,6 +6,8 @@ A fun 2d HTML5 canvas library.
 Usage
 -----
 
+### Basic Use
+
 Include all the files in src/ in your html. I cat them together with
 `cat src/*.js > examples/henri.js` and then include that.
 
@@ -43,3 +45,46 @@ When everything is set up, you can start things off:
 
 The `Stage` object has the following attributes:  properties width, height,
 frameRate, and frame; and methods start, stop, and addElement.
+
+### Sprites
+
+Rather than doing a bunch of canvas manipulation, it's usually easier to use a
+sprite. A helper object is included for this reason. Let's use a sprite for our
+asteroid rather than a black box:
+
+```javascript
+var Asteroid = function() {
+  this.width = 50;  // best to be the same size as the sprite images
+  this.height = 50;
+
+  this.sprite = new Sprite();
+  this.sprite.addImage('normal', 'asteroid1.png');
+  this.sprite.addImage('normal', 'asteroid2.png');
+
+  this.sprite.addImage('exploding', 'explosion1.png');
+  this.sprite.addImage('exploding', 'explosion2.png');
+  this.sprite.addImage('exploding', 'explosion3.png');
+
+  this.update = function() {
+    if (this.shouldExplode) {
+      this.sprite.setMode('exploding');
+    }
+
+    this.sprite.update();
+  };
+
+  this.render = function() {
+    return this.sprite.render();
+  };
+};
+```
+
+A couple of things to note here:
+
+- We have to make sure we update the sprite, otherwise it will appear stuck on
+  one image.
+- We use the sprite's image as our render image.
+- Sprites have 'modes', which each have a series of images that are displayed in
+  sequence when the sprite is in that mode. The default mode is 'normal', which
+  is empty at first. To create a new mode, simply add images with that mode
+  specified.
