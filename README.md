@@ -22,10 +22,15 @@ window.onload = function() {
 Boom, initialized. You probably want stuff in there, so you can do  this:
 
 ```javascript
-  var a = s.addElement(Asteroid, {x: 100, y: 100});
+  var a = s.addElement(0, Asteroid, {x: 100, y: 100});
 ```
 
-where `Asteroid` is an object constructor that you define. All stage elements
+where `Asteroid` is an object constructor that you define. The first parameter
+denotes which layer to put the element in; layers stack up from zero. If you ask
+to add an element to a layer higher than the highest layer, a new layer is
+added with the next available number (not necessarily the one you specified).
+
+All stage elements
 automatically inherit a few things:  the properties x, y, angle, scale, width,
 height, and stage; and the methods update, render, and removeFromStage. These do
 what you might expect. You get back a reference to the element in case you want
