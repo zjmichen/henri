@@ -2,13 +2,9 @@ window.onload = function() {
   var s = new Stage(document.getElementById('example'));
   s.toroidial = true;
 
-  s.at(500, function() {
-    console.log('Hello!');
-  });
-
-  var e = s.addElement(Ship, {});
-  var f = s.addElement(Ship, {x: 30});
-  var b = s.addElement(Bomb, {});
+  var e = s.addElement(0, Ship, {});
+  var f = s.addElement(0, Ship, {x: 30});
+  var b = s.addElement(0, Bomb, {});
   b.x = 50;
   b.y = 50;
 
@@ -24,18 +20,27 @@ window.onload = function() {
 
   f.sprite.setMode('thrusting');
 
+  s.at(100, function() {
+    e.die();
+  });
+
+
   s.start();
 
   window.f = f;
 }
 
 var Ship = function() {
+  var dying = false;
+
   this.sprite = new Sprite(this.width, this.height);
 
   this.sprite.addImage('normal', 'ship_normal.png');
   this.sprite.addImage('thrusting', 'ship_fire1.png');
   this.sprite.addImage('thrusting', 'ship_fire2.png');
   this.sprite.addImage('thrusting', 'ship_fire3.png');
+  this.sprite.addImage('dead', 'explosion1.png');
+  this.sprite.addImage('dead', 'explosion2.png');
 
   this.type = 'ship';
   this.x = 250;
@@ -44,11 +49,24 @@ var Ship = function() {
   this.height = 64;
 
   this.update = function() {
+    if (dying) {
+      this.scale *= 0.9;
+      if (this.scale <= 0.1) {
+        this.removeFromStage();
+      }
+    }
     this.sprite.update();
   };
 
   this.render = function() {
     return this.sprite.render();
+  };
+
+  this.die = function() {
+    dying = true;
+    this.sprite.setMode('dead');
+    this.width = 50;
+    this.height = 50;
   };
 };
 
