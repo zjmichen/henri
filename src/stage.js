@@ -1,88 +1,75 @@
-function Stage(canvas, I) {
-  I = I || {};
+var Stage = (function() {
 
-  var that = this
-    , priv = {}
-    , layers = []
-    , ctxMain = canvas.getContext('2d')
-    , height = canvas.height
-    , width = canvas.width
-    , bufMain = new Buffer(width, height)
-    , frameRate = I.frameRate || 60
-    , numLayers = I.numLayers || 2
-    , i
-    ;
+  var StageConstr = function(canvas) {
+    var update, draw, loop, 
+        elements = [],
+        ctx = canvas.getContext('2d');
 
-  this.frameCount = 0;
+    this.width = canvas.width;
+    this.height = canvas.height;
+    this.frameRate = 60;
 
-  for (i = 0; i < numLayers; i++) {
-    layers.push(new Layer(width, height));
-  }
+    this.addElement = function(ElementType, I) {
+      var el;
 
-  this.start = function() {
-    var delay = 1000 / frameRate;
-    priv.mainLoop = window.setInterval(function() {
-      update();
-      draw();
-      that.frameCount++;
-    }, delay);
-  };
+      ElementType.prototype = new Element(I);
+      el = new ElementType(I);
 
-  this.stop = function() {
-    window.clearInterval(priv.mainLoop);
-  };
+      el.removeFromStage = function() {
+        elements.splice(elements.indexOf(el), 1);
+      };
 
-  this.addElement = function(ElementSpec, I, layer) {
-    var element;
+      elements.push(el);
 
-    var ElementConstructor = function() {
-      var prop;
-      for (prop in I) {
-        this[prop] = I[prop];
+      return el;
+    };
+
+    this.start = function() {
+      var delay = 1000 / this.frameRate;
+      loop = setInterval(function() {
+        update();
+        draw();
+      }, delay);
+    };
+
+    this.stop = function() {
+      clearInterval(loop);
+    };
+
+    update = function() {
+      elements.forEach(function(el) {
+        el.update();
+      });
+    };
+
+    draw = function() {
+      for (var i = 0; i < 10; i++) {
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.moveTo(i * 0.1*canvas.width, 0);
+        ctx.lineTo(i * 0.1*canvas.width, canvas.height);
+        ctx.moveTo(0, i * 0.1*canvas.height);
+        ctx.lineTo(canvas.width, i * 0.1*canvas.height);
+        ctx.stroke();
       }
 
-      this.init(I);
+      elements.forEach(function(el) {
+        var x = el.x - 0.5*el.width,
+            y = el.y - 0.5*el.height;
+
+        ctx.save();
+        ctx.translate(el.x, el.y);
+        ctx.rotate(el.angle);
+        ctx.scale(el.scale, el.scale);
+        ctx.translate(-0.5*el.width, -0.5*el.height);
+
+        ctx.drawImage(el.render(), 0, 0);
+
+        ctx.restore();
+      });
     };
 
-    ElementConstructor.prototype = new Element(ElementSpec);
-    ElementConstructor.prototype.constructor = ElementConstructor;
-
-    element = new ElementConstructor(I);
-    console.log(element);
-
-    layer = (typeof layer === 'undefined') ? 0 : layer;
-    layers[layer].elements.push(element);
-
-    element.removeFromStage = function() {
-      layers[layer].elements.splice(
-          layers[layer].elements.indexOf(element), 1);
-    };
-
-    return element;
   };
 
-  var update = function() {
-    layers.forEach(function(layer) {
-      layer.elements.forEach(function(elem) {
-        elem.update();
-      });
-    });
-  };
-
-  var draw = function() {
-    bufMain.clearRect(0, 0, width, height);
-
-    layers.forEach(function(layer) {
-      layer.buffer.clearRect(0, 0, layer.width, layer.height);
-
-      layer.elements.forEach(function(elem) {
-        layer.buffer.drawImage(elem.render(), elem.x, elem.y);
-      });
-
-      bufMain.drawImage(layer.buffer.canvas, 0, 0);
-    });
-
-    ctxMain.clearRect(0, 0, width, height);
-    ctxMain.drawImage(bufMain.canvas, 0, 0);
-  };
-}
+  return StageConstr;
+})();

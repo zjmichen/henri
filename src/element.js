@@ -1,33 +1,25 @@
 var Element = (function() {
-  function ElementConstructor(I) {
-    var prop;
-    I = (typeof I !== 'object') ? {} : I;
+
+  var ElementConstr = function(I) {
     this.x = 0;
     this.y = 0;
-    this.sprite = new Sprite();
+    this.angle = 0;
+    this.scale = 1;
+    this.width = 100;
+    this.height = 100;
 
-    for (prop in I) {
-      this[prop] = I[prop];
-    }
-  }
+    this.update = function() {
+      console.info('No update for ' + this);
+    };
 
-  ElementConstructor.prototype = {
-    constructor: ElementConstructor,
+    this.render = function() {
+      var b = new Buffer(this.width, this.height);
+      b.fillStyle = 'black';
+      b.fillRect(0, 0, this.width, this.height);
 
-    type: 'Element',
-
-    init: function(I) {
-    },
-
-    update: function() {
-      this.sprite.update();
-    },
-
-    render: function() {
-      return this.sprite.getImage();
-    }
+      return b.canvas;
+    };
   };
 
-  return ElementConstructor;
+  return ElementConstr;
 })();
-
