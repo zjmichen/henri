@@ -2,6 +2,10 @@ window.onload = function() {
   var s = new Stage(document.getElementById('example'));
   s.toroidial = true;
 
+  s.at(500, function() {
+    console.log('Hello!');
+  });
+
   var e = s.addElement(Ship, {});
   var f = s.addElement(Ship, {x: 30});
   var b = s.addElement(Bomb, {});

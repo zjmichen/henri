@@ -3,6 +3,7 @@ var Stage = (function() {
   var StageConstr = function(canvas) {
     var update, draw, loop, 
         elements = [],
+        ats = [],
         mainCtx = canvas.getContext('2d'),
         backBuf;
 
@@ -42,7 +43,22 @@ var Stage = (function() {
       clearInterval(loop);
     };
 
+    this.at = function(frameWhen, callback) {
+      if (ats[frameWhen] === undefined) {
+        ats[frameWhen] = [];
+      }
+
+      ats[frameWhen].push(callback);
+    };
+
     update = function() {
+      if (ats[this.frame] !== undefined) {
+        ats[this.frame].forEach(function(callback) {
+          callback();
+        });
+        delete ats[this.frame];
+      }
+
       elements.forEach(function(el) {
         el.update();
       });
