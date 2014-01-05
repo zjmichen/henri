@@ -81,7 +81,8 @@ var Stage = (function() {
       layers.forEach(function(layer) {
         layer.elements.forEach(function(el) {
           var x = el.x,
-              y = el.y;
+              y = el.y,
+              img;
 
           if (this.toroidial) {
             x = x % this.width;
@@ -92,9 +93,11 @@ var Stage = (function() {
           backBuf.translate(x, y);
           backBuf.rotate(el.angle);
           backBuf.scale(el.scale, el.scale);
-          backBuf.translate(-0.5*el.width, -0.5*el.height);
 
-          backBuf.drawImage(el.render(), 0, 0);
+          img = el.render();
+
+          backBuf.translate(-0.5*img.width, -0.5*img.height);
+          backBuf.drawImage(img, 0, 0);
 
           backBuf.restore();
         }.bind(this));
