@@ -19,17 +19,21 @@ window.onload = function() {
 }
 
 var Ship = function() {
-  var b = new Buffer(this.width, this.height);
-  this.type = 'ship';
+  var sprite = new Sprite(this.width, this.height);
 
+  sprite.addImage('normal', 'ship_normal.png');
+
+  this.type = 'ship';
   this.x = 250;
   this.y = 200;
+  this.width = 150;
+  this.height = 64;
+
+  this.update = function() {
+    sprite.update();
+  };
 
   this.render = function() {
-    b.clearRect(0, 0, this.width, this.height);
-
-    b.fillRect(0, 0, this.width, this.height);
-
-    return b.canvas;
+    return sprite.render();
   };
 };
