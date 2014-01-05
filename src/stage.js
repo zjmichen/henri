@@ -5,7 +5,8 @@ var Stage = (function() {
         layers = [],
         ats = [],
         mainCtx = canvas.getContext('2d'),
-        backBuf;
+        backBuf,
+        debugGrid = true;
 
     this.width = canvas.width;
     this.height = canvas.height;
@@ -75,8 +76,52 @@ var Stage = (function() {
     }.bind(this);
 
     draw = function() {
+      var i;
       mainCtx.clearRect(0, 0, this.width, this.height);
       backBuf.clearRect(0, 0, this.width, this.height);
+
+      if (debugGrid) {
+        for (i = 0; i < this.width; i+=10) {
+          backBuf.save();
+          backBuf.beginPath();
+          backBuf.lineWidth = 1;
+          backBuf.strokeStyle = 'rgba(127,127,127,0.5)';
+
+          if (i % 50 === 0) {
+            backBuf.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+          }
+          if (i % 100 === 0) {
+            backBuf.strokeStyle = 'rgba(0, 0, 0, 1)';
+          }
+
+          backBuf.moveTo(i, 0);
+          backBuf.lineTo(i, this.height);
+
+          backBuf.stroke();
+          backBuf.restore();
+        }
+
+        for (i = 0; i < this.height; i += 10) {
+          backBuf.save();
+          backBuf.beginPath();
+          backBuf.lineWidth = 2;
+          backBuf.lineWidth = 1;
+          backBuf.strokeStyle = 'rgba(127, 127, 127, 0.5)';
+
+          if (i % 50 === 0) {
+            backBuf.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+          }
+          if (i % 100 === 0) {
+            backBuf.strokeStyle = 'rgba(0, 0, 0, 1)';
+          }
+
+          backBuf.moveTo(0, i);
+          backBuf.lineTo(this.width, i);
+
+          backBuf.stroke();
+          backBuf.restore();
+        }
+      }
 
       layers.forEach(function(layer) {
         layer.elements.forEach(function(el) {
@@ -96,7 +141,9 @@ var Stage = (function() {
 
           img = el.render();
 
-          backBuf.translate(-0.5*img.width, -0.5*img.height);
+          if (el.drawPosition === 'center') {
+            backBuf.translate(-0.5*img.width, -0.5*img.height);
+          }
           backBuf.drawImage(img, 0, 0);
 
           backBuf.restore();

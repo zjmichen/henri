@@ -50,6 +50,10 @@ window.onload = function() {
     }
   });
 
+  s.at(250, function() {
+    secHand.moveTo(200, 200, 200);
+  });
+
   s.start();
 }
 
@@ -79,4 +83,16 @@ var Hand = function() {
 
     return b.canvas;
   };
+}
+
+var BoxDrawer = function() {
+  this.width = 0;
+  this.height = 0;
+  this.drawing = false;
+
+  this.handlers = {
+    onmousedown: function() {
+
+    }
+  }
 }
