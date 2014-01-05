@@ -2,6 +2,8 @@ window.onload = function() {
   var s = new Stage(document.getElementById('example')),
       i, n;
 
+  s.debug = true;
+
   for (i = 0; i < 12; i++) {
     n = s.addElement(0, Numeral, {});
     n.value = i+1;
@@ -79,4 +81,10 @@ var Hand = function() {
 
     return b.canvas;
   };
+
+  this.events = {
+    click: function(evt) {
+      console.log("Click!");
+    }
+  }
 }
