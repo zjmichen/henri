@@ -1,6 +1,8 @@
 var Element = (function() {
 
   var ElementConstr = function(I) {
+    var prop;
+    
     this.x = 0;
     this.y = 0;
     this.angle = 0;
@@ -19,6 +21,10 @@ var Element = (function() {
 
       return b.canvas;
     };
+
+    for (prop in I) {
+      this[prop] = I[prop];
+    }
   };
 
   return ElementConstr;

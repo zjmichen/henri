@@ -10,44 +10,45 @@ window.onload = function() {
     n.y = -0.5*(s.height - n.height) * Math.cos( (i+1) / 12 * 2*Math.PI) + 0.5*s.height;
   }
 
-  var hrHand = s.addElement(1, Hand, {});
-  hrHand.width = 350;
-  hrHand.height = 10;
-  hrHand.x = 0.5*s.width;
-  hrHand.y = 0.5*s.height;
+  var hrHand = s.addElement(1, Hand, {
+    width: 350,
+    height: 10,
+    x: 0.5*s.width,
+    y: 0.5*s.height,
 
-  hrHand.update = function() {
-    var d = new Date(),
-        hours = d.getHours() + (d.getMinutes() / 60);
+    update: function() {
+      var d = new Date(),
+          hours = d.getHours() + (d.getMinutes() / 60);
 
-    this.angle = (hours / 12) * Math.PI * 2 - 0.5*Math.PI;
-  };
+      this.angle = (hours / 12) * Math.PI * 2 - 0.5*Math.PI;
+    }
+  });
 
-  var minHand = s.addElement(1, Hand, {});
-  minHand.width = 450;
-  minHand.height = 10;
-  minHand.x = 0.5*s.width;
-  minHand.y = 0.5*s.height;
+  var minHand = s.addElement(1, Hand, {
+    width: 450,
+    height: 10,
+    x: 0.5*s.width,
+    y: 0.5*s.height,
+    update: function() {
+      var d = new Date(),
+          mins = d.getMinutes() + (d.getSeconds() / 60);
 
-  minHand.update = function() {
-    var d = new Date(),
-        mins = d.getMinutes() + (d.getSeconds() / 60);
+      this.angle = (mins / 60) * Math.PI * 2 - 0.5*Math.PI;
+    }
+  });
 
-    this.angle = (mins / 60) * Math.PI * 2 - 0.5*Math.PI;
-  };
+  var secHand = s.addElement(1, Hand, {
+    width: 450,
+    height: 2,
+    x: 0.5*s.width,
+    y: 0.5*s.height,
+    update: function() {
+      var d = new Date(),
+          secs = d.getSeconds() + (d.getMilliseconds() / 1000);
 
-  var secHand = s.addElement(1, Hand, {});
-  secHand.width = 450;
-  secHand.height = 2;
-  secHand.x = 0.5*s.width;
-  secHand.y = 0.5*s.height;
-
-  secHand.update = function() {
-    var d = new Date(),
-        secs = d.getSeconds() + (d.getMilliseconds() / 1000);
-
-    this.angle = (secs / 60) * Math.PI * 2 - 0.5*Math.PI;
-  };
+      this.angle = (secs / 60) * Math.PI * 2 - 0.5*Math.PI;
+    }
+  });
 
   s.start();
 }
