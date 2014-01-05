@@ -10,6 +10,7 @@ var Stage = (function() {
     this.height = canvas.height;
     this.frameRate = 60;
     this.frame = 0;
+    this.toroidial = false;
 
     backBuf = new Buffer(this.width, this.height);
 
@@ -64,11 +65,16 @@ var Stage = (function() {
       }
 
       elements.forEach(function(el) {
-        var x = el.x - 0.5*el.width,
-            y = el.y - 0.5*el.height;
+        var x = el.x,
+            y = el.y;
+
+        if (this.toroidial) {
+          x = x % this.width;
+          y = y % this.height;
+        }
 
         backBuf.save();
-        backBuf.translate(el.x, el.y);
+        backBuf.translate(x, y);
         backBuf.rotate(el.angle);
         backBuf.scale(el.scale, el.scale);
         backBuf.translate(-0.5*el.width, -0.5*el.height);
@@ -76,7 +82,7 @@ var Stage = (function() {
         backBuf.drawImage(el.render(), 0, 0);
 
         backBuf.restore();
-      });
+      }.bind(this));
 
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);

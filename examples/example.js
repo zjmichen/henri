@@ -1,8 +1,12 @@
 window.onload = function() {
   var s = new Stage(document.getElementById('example'));
+  s.toroidial = true;
 
   var e = s.addElement(Ship, {});
   var f = s.addElement(Ship, {x: 30});
+  var b = s.addElement(Bomb, {});
+  b.x = 50;
+  b.y = 50;
 
   f.angle = Math.PI * 0.25;
   f.x = 100;
@@ -42,4 +46,24 @@ var Ship = function() {
   this.render = function() {
     return this.sprite.render();
   };
+};
+
+var Bomb = function() {
+  this.sprite = new Sprite(this.width, this.height);
+  this.sprite.addImage('normal', 'bomb.png');
+
+  this.width = 15;
+  this.height = 15;
+  this.direction = 0.25*Math.PI;
+  this.speed = 0.5;
+
+  this.update = function() {
+    this.sprite.update();
+    this.x += this.speed*Math.cos(this.direction);
+    this.y += this.speed*Math.sin(this.direction);
+  }
+
+  this.render = function() {
+    return this.sprite.render();
+  }
 };
