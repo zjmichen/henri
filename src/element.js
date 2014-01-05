@@ -1,7 +1,8 @@
 var Element = (function() {
 
   var ElementConstr = function(I) {
-    var prop;
+    var prop,
+        updates = [];
 
     this.x = 0;
     this.y = 0;
@@ -24,19 +25,22 @@ var Element = (function() {
     };
 
     this.moveTo = function(x, y, frames) {
-      var _update = this.update,
-          dx = (x - this.x) / frames,
-          dy = (y - this.y) / frames;
+      var dx = (x - this.x) / frames,
+          dy = (y - this.y) / frames,
+          endFrame = this.stage.frame + frames,
+          nextUpdate = this.update;
+
+      console.log("Move to " + x + ", " + y + " will complete at " + endFrame);
 
       this.update = function() {
-        if (this.x === x && this.y === y) {
-          this.update = _update;
-        } else {
+        if (this.stage.frame >= endFrame) {
+          nextUpdate.call(this);
+        }  else {
           this.x += dx;
           this.y += dy;
-          _update.call(this);
+          nextUpdate.call(this);
         }
-      };
+      }
     };
 
     for (prop in I) {
