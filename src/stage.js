@@ -3,11 +3,15 @@ var Stage = (function() {
   var StageConstr = function(canvas) {
     var update, draw, loop, 
         elements = [],
-        ctx = canvas.getContext('2d');
+        mainCtx = canvas.getContext('2d'),
+        backBuf;
 
     this.width = canvas.width;
     this.height = canvas.height;
     this.frameRate = 60;
+    this.frame = 0;
+
+    backBuf = new Buffer(this.width, this.height);
 
     this.addElement = function(ElementType, I) {
       var el;
@@ -15,6 +19,7 @@ var Stage = (function() {
       ElementType.prototype = new Element(I);
       el = new ElementType(I);
 
+      el.stage = this;
       el.removeFromStage = function() {
         elements.splice(elements.indexOf(el), 1);
       };
@@ -40,34 +45,41 @@ var Stage = (function() {
       elements.forEach(function(el) {
         el.update();
       });
-    };
+
+      this.frame++;
+    }.bind(this);
 
     draw = function() {
+      mainCtx.clearRect(0, 0, this.width, this.height);
+      backBuf.clearRect(0, 0, this.width, this.height);
+
       for (var i = 0; i < 10; i++) {
-        ctx.strokeStyle = 'black';
-        ctx.beginPath();
-        ctx.moveTo(i * 0.1*canvas.width, 0);
-        ctx.lineTo(i * 0.1*canvas.width, canvas.height);
-        ctx.moveTo(0, i * 0.1*canvas.height);
-        ctx.lineTo(canvas.width, i * 0.1*canvas.height);
-        ctx.stroke();
+        backBuf.strokeStyle = 'black';
+        backBuf.beginPath();
+        backBuf.moveTo(i * 0.1*canvas.width, 0);
+        backBuf.lineTo(i * 0.1*canvas.width, canvas.height);
+        backBuf.moveTo(0, i * 0.1*canvas.height);
+        backBuf.lineTo(canvas.width, i * 0.1*canvas.height);
+        backBuf.stroke();
       }
 
       elements.forEach(function(el) {
         var x = el.x - 0.5*el.width,
             y = el.y - 0.5*el.height;
 
-        ctx.save();
-        ctx.translate(el.x, el.y);
-        ctx.rotate(el.angle);
-        ctx.scale(el.scale, el.scale);
-        ctx.translate(-0.5*el.width, -0.5*el.height);
+        backBuf.save();
+        backBuf.translate(el.x, el.y);
+        backBuf.rotate(el.angle);
+        backBuf.scale(el.scale, el.scale);
+        backBuf.translate(-0.5*el.width, -0.5*el.height);
 
-        ctx.drawImage(el.render(), 0, 0);
+        backBuf.drawImage(el.render(), 0, 0);
 
-        ctx.restore();
+        backBuf.restore();
       });
-    };
+
+      mainCtx.drawImage(backBuf.canvas, 0, 0);
+    }.bind(this);
 
   };
 
