@@ -53,7 +53,7 @@ window.onload = function() {
   s.at(250, function() {
     secHand.moveTo(200, 200, 200);
   });
-   s.at(450, function() {
+   s.at(400, function() {
     secHand.moveTo(secHand.x + 50, secHand.y + 50, 200);
    });
 

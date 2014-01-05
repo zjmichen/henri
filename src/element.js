@@ -28,19 +28,26 @@ var Element = (function() {
       var dx = (x - this.x) / frames,
           dy = (y - this.y) / frames,
           endFrame = this.stage.frame + frames,
-          nextUpdate = this.update;
+          thisUpdate;
 
-      console.log("Move to " + x + ", " + y + " will complete at " + endFrame);
-
-      this.update = function() {
+      thisUpdate = function() {
         if (this.stage.frame >= endFrame) {
-          nextUpdate.call(this);
+          if (thisUpdate.prevUpdate !== undefined) {
+            thisUpdate.prevUpdate.nextUpdate = thisUpdate.nextUpdate;
+          } else {
+            this.update = thisUpdate.nextUpdate;
+          }
         }  else {
           this.x += dx;
           this.y += dy;
-          nextUpdate.call(this);
+          thisUpdate.nextUpdate.call(this);
         }
       }
+
+      thisUpdate.nextUpdate = this.update;
+      thisUpdate.nextUpdate.prevUpdate = thisUpdate;
+
+      this.update = thisUpdate;
     };
 
     for (prop in I) {
