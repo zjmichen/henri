@@ -1,20 +1,25 @@
-window.onload = function() {
-  var s = new Stage(document.getElementById('example')),
+var Clock = function(I) {
+  var buffer = new Buffer(500, 500),
+      width = (I.width === undefined) ? 500 : I.width,
+      height = (I.height === undefined) ? 500 : I.height,
+      stage = new Stage(buffer.canvas),
       i, n;
 
   for (i = 0; i < 12; i++) {
-    n = s.addElement(0, Numeral, {});
+    n = stage.addElement(0, Numeral, {});
     n.value = i+1;
 
-    n.x = 0.5*(s.width - n.width) * Math.sin( (i+1) / 12 * 2*Math.PI) + 0.5*s.width;
-    n.y = -0.5*(s.height - n.height) * Math.cos( (i+1) / 12 * 2*Math.PI) + 0.5*s.height;
+    n.x = 0.5*(stage.width - n.width) * 
+        Math.sin( (i+1) / 12 * 2*Math.PI) + 0.5*stage.width;
+    n.y = -0.5*(stage.height - n.height) * 
+        Math.cos( (i+1) / 12 * 2*Math.PI) + 0.5*stage.height;
   }
 
-  var hrHand = s.addElement(1, Hand, {
+  var hrHand = stage.addElement(1, Hand, {
     width: 350,
     height: 10,
-    x: 0.5*s.width,
-    y: 0.5*s.height,
+    x: 0.5*stage.width,
+    y: 0.5*stage.height,
 
     update: function() {
       var d = new Date(),
@@ -24,11 +29,11 @@ window.onload = function() {
     }
   });
 
-  var minHand = s.addElement(1, Hand, {
+  var minHand = stage.addElement(1, Hand, {
     width: 450,
     height: 10,
-    x: 0.5*s.width,
-    y: 0.5*s.height,
+    x: 0.5*stage.width,
+    y: 0.5*stage.height,
     update: function() {
       var d = new Date(),
           mins = d.getMinutes() + (d.getSeconds() / 60);
@@ -37,11 +42,11 @@ window.onload = function() {
     }
   });
 
-  var secHand = s.addElement(1, Hand, {
+  var secHand = stage.addElement(1, Hand, {
     width: 450,
     height: 2,
-    x: 0.5*s.width,
-    y: 0.5*s.height,
+    x: 0.5*stage.width,
+    y: 0.5*stage.height,
     update: function() {
       var d = new Date(),
           secs = d.getSeconds() + (d.getMilliseconds() / 1000);
@@ -50,14 +55,18 @@ window.onload = function() {
     }
   });
 
-  s.at(250, function() {
+  stage.at(250, function() {
     secHand.moveTo(200, 200, 200);
   });
-   s.at(400, function() {
+   stage.at(400, function() {
     secHand.moveTo(secHand.x + 50, secHand.y + 50, 200);
-   });
+  });
 
-  s.start();
+  this.update = stage.update;
+  this.render = function() {
+    stage.draw();
+    return buffer.canvas;
+  };
 }
 
 var Numeral = function() {
@@ -86,16 +95,4 @@ var Hand = function() {
 
     return b.canvas;
   };
-}
-
-var BoxDrawer = function() {
-  this.width = 0;
-  this.height = 0;
-  this.drawing = false;
-
-  this.handlers = {
-    onmousedown: function() {
-
-    }
-  }
 }
