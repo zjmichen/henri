@@ -30,7 +30,7 @@ var Stage = (function() {
 
       el.stage = this;
       el.removeFromStage = function() {
-        layers[layer].elements.splice(layers[layer].elements.indexOf(el), 1);
+        layers[layer].elements.splice(Layers[layer].elements.indexOf(el), 1);
       };
 
       for (evtName in el.events) {
@@ -112,6 +112,7 @@ var Stage = (function() {
 
           if (this.debug) {
             backBuf.lineWidth = 1;
+            backBuf.strokeStyle = 'rgba(255, 100, 0, 0.8)';
             backBuf.strokeRect(0, 0, img.width, img.height);
           }
 
@@ -124,19 +125,22 @@ var Stage = (function() {
 
     drawGrid = function(ctx) {
       var width = ctx.canvas.width,
-          height = ctx.canvas.height;
+          height = ctx.canvas.height,
+          tenColor = 'rgba(127, 127, 255, 0.5)',
+          fiftyColor = 'rgba(0, 0, 255, 0.5)',
+          hundredColor = 'rgba(0, 0, 255, 0.8)';
 
       for (i = 0; i < width; i+=10) {
         ctx.save();
         ctx.beginPath();
         ctx.lineWidth = 1;
-        ctx.strokeStyle = 'rgba(127,127,127,0.5)';
+        ctx.strokeStyle = tenColor;
 
         if (i % 50 === 0) {
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+          ctx.strokeStyle = fiftyColor;
         }
         if (i % 100 === 0) {
-          ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+          ctx.strokeStyle = hundredColor;
         }
 
         ctx.moveTo(i, 0);
@@ -151,13 +155,13 @@ var Stage = (function() {
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.lineWidth = 1;
-        ctx.strokeStyle = 'rgba(127, 127, 127, 0.5)';
+        ctx.strokeStyle = tenColor;
 
         if (i % 50 === 0) {
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+          ctx.strokeStyle = fiftyColor;
         }
         if (i % 100 === 0) {
-          ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+          ctx.strokeStyle = hundredColor;
         }
 
         ctx.moveTo(0, i);
