@@ -1,19 +1,21 @@
 var Sprite = (function() {
   var blankBuffer = new Buffer(1, 1);
 
-  return function(width, height) {
+  return function() {
     var modes = { normal: [] },
         mode = 'normal',
         frame = 0,
         skips = 0;
 
-    this.width = width;
-    this.height = height;
-    this.skipFrames = 3;
+    this.skipFrames = 5;
 
     this.setMode = function(m) {
       mode = m;
       frame = 0;
+    };
+
+    this.getMode = function() {
+      return mode;
     };
 
     this.update = function() {

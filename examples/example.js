@@ -2,97 +2,108 @@ window.onload = function() {
   var s = new Stage(document.getElementById('example')),
       i, n;
 
+  s.toroidial = true;
   s.debug = true;
 
-  for (i = 0; i < 12; i++) {
-    n = s.addElement(0, Numeral, {});
-    n.value = i+1;
-
-    n.x = 0.5*(s.width - n.width) * Math.sin( (i+1) / 12 * 2*Math.PI) + 0.5*s.width;
-    n.y = -0.5*(s.height - n.height) * Math.cos( (i+1) / 12 * 2*Math.PI) + 0.5*s.height;
-  }
-
-  var hrHand = s.addElement(1, Hand, {
-    width: 350,
-    height: 10,
-    x: 0.5*s.width,
-    y: 0.5*s.height,
-
-    update: function() {
-      var d = new Date(),
-          hours = d.getHours() + (d.getMinutes() / 60);
-
-      this.angle = (hours / 12) * Math.PI * 2 - 0.5*Math.PI;
-    }
-  });
-
-  var minHand = s.addElement(1, Hand, {
-    width: 450,
-    height: 10,
-    x: 0.5*s.width,
-    y: 0.5*s.height,
-    update: function() {
-      var d = new Date(),
-          mins = d.getMinutes() + (d.getSeconds() / 60);
-
-      this.angle = (mins / 60) * Math.PI * 2 - 0.5*Math.PI;
-    }
-  });
-
-  var secHand = s.addElement(1, Hand, {
-    width: 450,
-    height: 2,
-    x: 0.5*s.width,
-    y: 0.5*s.height,
-    update: function() {
-      var d = new Date(),
-          secs = d.getSeconds() + (d.getMilliseconds() / 1000);
-
-      this.angle = (secs / 60) * Math.PI * 2 - 0.5*Math.PI;
-    }
-  });
+  s.addElement(0, Ship, {x: 100, y: 100});
 
   s.start();
 }
 
-var Numeral = function() {
-  var b = new Buffer(20, 16);
-  this.value = 0;
-  this.y = 100;
-  this.width = 20;
-  this.height = 25;
+var Ship = function() {
+  var that = this,
+      sprite = new Sprite(),
+      direction = 0,
+      speed = 1,
+      actions,
+      accel = 0.2,
+      actions = [],
+      turnLeft,
+      turnRight,
+      thrust;
 
-  this.render = function() {
-    var xOffset = 0.5*(this.width - b.measureText(this.value).width);
+  sprite.addImage('normal', 'ship_normal.png');
+  sprite.addImage('thrusting', 'ship_fire1.png');
+  sprite.addImage('thrusting', 'ship_fire2.png');
+  sprite.addImage('thrusting', 'ship_fire3.png');
 
-    b.clearRect(0, 0, this.width, this.height);
-    b.fillText(this.value, xOffset, 0.5*this.height);
-    b.textAlign = 'left';
-    b.font = '16px sans-serif';
+  this.update = function() {
+    this.x += speed*Math.cos(direction);
+    this.y += speed*Math.sin(direction);
 
-    return b.canvas;
+    speed *= 0.99;
+
+    actions.forEach(function(action) {
+      action();
+    });
+
+    sprite.update();
   };
-};
-
-var Hand = function() {
-  this.angle = -0.5*Math.PI;
-  that = this;
 
   this.render = function() {
-    var b = new Buffer(this.width, this.height);
-
-    b.fillRect(0.5*this.width, 0, 0.5*this.width, this.height);
-
-    return b.canvas;
+    return sprite.render();
   };
 
   this.events = {
-    click: function(evt) {
-      that.stage.debug = !that.stage.debug;
+    keydown: function(evt) {
+      if (evt.keyCode === 38) {
+        if (sprite.getMode() !== 'thrusting') {
+          sprite.setMode('thrusting');
+        }
+
+        if (actions.indexOf(thrust) === -1) {
+          actions.push(thrust);
+        }
+      }
+
+      if (evt.keyCode === 37 && actions.indexOf(turnLeft) === -1) {
+        actions.push(turnLeft);
+      }
+
+      if (evt.keyCode === 39 && actions.indexOf(turnRight) === -1) {
+        actions.push(turnRight);
+      }
     },
 
-    keydown: function(evt) {
-      console.log(evt);
+    keyup: function(evt) {
+      if (evt.keyCode === 38) {
+        sprite.setMode('normal');
+        actions.splice(actions.indexOf(thrust), 1);
+      }
+
+      if (actions.indexOf(turnLeft) !== -1) {
+        actions.splice(actions.indexOf(turnLeft), 1);
+      }
+      if (actions.indexOf(turnRight) !== -1) {
+        actions.splice(actions.indexOf(turnRight), 1);
+      }
     }
-  }
-}
+  };
+
+  turnLeft = function() {
+    this.angle -= 0.1;
+  }.bind(this);
+
+  turnRight = function() {
+    this.angle += 0.1;
+  }.bind(this);
+
+  thrust = function() {
+    var xSpeed = speed*Math.cos(direction),
+        ySpeed = speed*Math.sin(direction),
+        xDelta = accel*Math.cos(this.angle),
+        yDelta = accel*Math.sin(this.angle);
+
+    xSpeed += xDelta;
+    ySpeed += yDelta;
+    speed = Math.sqrt(
+        Math.pow(xSpeed, 2) + 
+        Math.pow(ySpeed, 2));
+
+    direction = Math.acos(xSpeed / speed);
+    if (Math.asin(ySpeed / speed) < 0) {
+      direction *= -1;
+    }
+  }.bind(this);
+
+};
