@@ -35,7 +35,7 @@ var Stage = (function() {
 
       for (evtName in el.events) {
         console.log(evtName);
-        canvas.addEventListener(evtName, el.events[evtName]);
+        document.addEventListener(evtName, el.events[evtName]);
       }
 
       layers[layer].elements.push(el);

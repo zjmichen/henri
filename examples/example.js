@@ -89,6 +89,10 @@ var Hand = function() {
   this.events = {
     click: function(evt) {
       that.stage.debug = !that.stage.debug;
+    },
+
+    keydown: function(evt) {
+      console.log(evt);
     }
   }
 }
