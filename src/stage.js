@@ -34,7 +34,6 @@ var Stage = (function() {
       };
 
       for (evtName in el.events) {
-        console.log(evtName);
         document.addEventListener(evtName, el.events[evtName]);
       }
 
@@ -96,8 +95,8 @@ var Stage = (function() {
               img;
 
           if (this.toroidial) {
-            x = x % this.width;
-            y = y % this.height;
+            x = ((x % this.width) + this.width) % this.width;
+            y = ((y % this.height) + this.height) % this.height;
           }
 
           backBuf.save();
