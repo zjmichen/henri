@@ -39,10 +39,12 @@ var Stage = (function() {
     };
 
     this.start = function() {
-      var delay = 1000 / this.frameRate;
+      var that = this,
+          delay = 1000 / this.frameRate;
+
       loop = setInterval(function() {
-        update();
-        draw();
+        that.update();
+        that.draw();
       }, delay);
     };
 
@@ -58,7 +60,7 @@ var Stage = (function() {
       ats[frameWhen].push(callback);
     };
 
-    update = function() {
+    this.update = function() {
       if (ats[this.frame] !== undefined) {
         ats[this.frame].forEach(function(callback) {
           callback();
@@ -75,7 +77,7 @@ var Stage = (function() {
       this.frame++;
     }.bind(this);
 
-    draw = function() {
+    this.draw = function() {
       var i;
       mainCtx.clearRect(0, 0, this.width, this.height);
       backBuf.clearRect(0, 0, this.width, this.height);
