@@ -7,7 +7,7 @@ window.onload = function() {
   shipStage.addElement(0, Ship, {x: 100, y: 100});
 
   clockStage.debug = true;
-  clockStage.addElement(0, Clock, {width: 200, height: 200, x: 200, y:200});
+  clockStage.addElement(0, Clock, {width: 200, height: 200, x: 250, y:250});
 
   shipStage.start();
   clockStage.start();

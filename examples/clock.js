@@ -66,12 +66,14 @@ var Clock = function(I) {
   this.render = function() {
     var img;
 
-    stage.draw();
     buffer.save();
-    buffer.scale(width / buffer.width, height / buffer.height);
-    img = buffer.canvas;
+    buffer.translate(0.5*(buffer.canvas.width - width), 
+        0.5*(buffer.canvas.height - height));
+    buffer.scale(width / buffer.canvas.width, height / buffer.canvas.height);
+    stage.draw();
     buffer.restore();
-    
+
+    img = buffer.canvas;
     return img;
   };
 }
