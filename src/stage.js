@@ -115,7 +115,7 @@ var Stage = (function() {
           backBuf.drawImage(img, 0, 0);
 
           if (this.debug) {
-            backBuf.lineWidth = 1;
+            backBuf.lineWidth = 2;
             backBuf.strokeStyle = 'rgba(255, 100, 0, 0.8)';
             backBuf.strokeRect(0, 0, img.width, img.height);
           }

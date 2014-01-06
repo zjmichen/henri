@@ -3,7 +3,13 @@ var Clock = function(I) {
       width = (I.width === undefined) ? 500 : I.width,
       height = (I.height === undefined) ? 500 : I.height,
       stage = new Stage(buffer.canvas),
+      aspectRatio = height / width,
       i, n;
+
+  this.scale = width / 500;
+  if (width !== height) {
+    buffer.canvas.height *= aspectRatio;
+  }
 
   for (i = 0; i < 12; i++) {
     n = stage.addElement(0, Numeral, {});
@@ -64,17 +70,12 @@ var Clock = function(I) {
 
   this.update = stage.update;
   this.render = function() {
-    var img;
-
     buffer.save();
-    buffer.translate(0.5*(buffer.canvas.width - width), 
-        0.5*(buffer.canvas.height - height));
-    buffer.scale(width / buffer.canvas.width, height / buffer.canvas.height);
+    buffer.scale(1, aspectRatio);
     stage.draw();
     buffer.restore();
 
-    img = buffer.canvas;
-    return img;
+    return buffer.canvas;
   };
 }
 
