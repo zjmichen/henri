@@ -64,8 +64,15 @@ var Clock = function(I) {
 
   this.update = stage.update;
   this.render = function() {
+    var img;
+
     stage.draw();
-    return buffer.canvas;
+    buffer.save();
+    buffer.scale(width / buffer.width, height / buffer.height);
+    img = buffer.canvas;
+    buffer.restore();
+    
+    return img;
   };
 }
 

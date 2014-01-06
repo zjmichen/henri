@@ -8,6 +8,7 @@ var Stage = (function() {
         backBuf,
         debugGrid = true;
 
+    this.debug = false;
     this.width = canvas.width;
     this.height = canvas.height;
     this.frameRate = 60;
@@ -18,7 +19,7 @@ var Stage = (function() {
     backBuf = new Buffer(this.width, this.height);
 
     this.addElement = function(layer, ElementType, I) {
-      var el;
+      var el, evtName;
 
       if (layer >= layers.length) {
         layers.push(new Layer(this.width, this.height));
@@ -30,8 +31,12 @@ var Stage = (function() {
 
       el.stage = this;
       el.removeFromStage = function() {
-        layers[layer].elements.splice(layers[layer].elements.indexOf(el), 1);
+        layers[layer].elements.splice(Layers[layer].elements.indexOf(el), 1);
       };
+
+      for (evtName in el.events) {
+        document.addEventListener(evtName, el.events[evtName]);
+      }
 
       layers[layer].elements.push(el);
 
@@ -82,47 +87,8 @@ var Stage = (function() {
       mainCtx.clearRect(0, 0, this.width, this.height);
       backBuf.clearRect(0, 0, this.width, this.height);
 
-      if (debugGrid) {
-        for (i = 0; i < this.width; i+=10) {
-          backBuf.save();
-          backBuf.beginPath();
-          backBuf.lineWidth = 1;
-          backBuf.strokeStyle = 'rgba(127,127,127,0.5)';
-
-          if (i % 50 === 0) {
-            backBuf.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-          }
-          if (i % 100 === 0) {
-            backBuf.strokeStyle = 'rgba(0, 0, 0, 1)';
-          }
-
-          backBuf.moveTo(i, 0);
-          backBuf.lineTo(i, this.height);
-
-          backBuf.stroke();
-          backBuf.restore();
-        }
-
-        for (i = 0; i < this.height; i += 10) {
-          backBuf.save();
-          backBuf.beginPath();
-          backBuf.lineWidth = 2;
-          backBuf.lineWidth = 1;
-          backBuf.strokeStyle = 'rgba(127, 127, 127, 0.5)';
-
-          if (i % 50 === 0) {
-            backBuf.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-          }
-          if (i % 100 === 0) {
-            backBuf.strokeStyle = 'rgba(0, 0, 0, 1)';
-          }
-
-          backBuf.moveTo(0, i);
-          backBuf.lineTo(this.width, i);
-
-          backBuf.stroke();
-          backBuf.restore();
-        }
+      if (this.debug) {
+        drawGrid(backBuf);
       }
 
       layers.forEach(function(layer) {
@@ -132,8 +98,8 @@ var Stage = (function() {
               img;
 
           if (this.toroidial) {
-            x = x % this.width;
-            y = y % this.height;
+            x = ((x % this.width) + this.width) % this.width;
+            y = ((y % this.height) + this.height) % this.height;
           }
 
           backBuf.save();
@@ -148,12 +114,67 @@ var Stage = (function() {
           }
           backBuf.drawImage(img, 0, 0);
 
+          if (this.debug) {
+            backBuf.lineWidth = 1;
+            backBuf.strokeStyle = 'rgba(255, 100, 0, 0.8)';
+            backBuf.strokeRect(0, 0, img.width, img.height);
+          }
+
           backBuf.restore();
         }.bind(this));
       }.bind(this));
 
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);
+
+    drawGrid = function(ctx) {
+      var width = ctx.canvas.width,
+          height = ctx.canvas.height,
+          tenColor = 'rgba(127, 127, 255, 0.5)',
+          fiftyColor = 'rgba(0, 0, 255, 0.5)',
+          hundredColor = 'rgba(0, 0, 255, 0.8)';
+
+      for (i = 0; i < width; i+=10) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = tenColor;
+
+        if (i % 50 === 0) {
+          ctx.strokeStyle = fiftyColor;
+        }
+        if (i % 100 === 0) {
+          ctx.strokeStyle = hundredColor;
+        }
+
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      for (i = 0; i < height; i += 10) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = tenColor;
+
+        if (i % 50 === 0) {
+          ctx.strokeStyle = fiftyColor;
+        }
+        if (i % 100 === 0) {
+          ctx.strokeStyle = hundredColor;
+        }
+
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
+
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
 
   };
 
