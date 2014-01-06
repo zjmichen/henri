@@ -56,15 +56,18 @@ window.onload = function() {
 }
 
 var Numeral = function() {
-  var b = new Buffer(50, 50);
+  var b = new Buffer(20, 16);
   this.value = 0;
   this.y = 100;
-  this.width = 50;
-  this.height = 50;
+  this.width = 20;
+  this.height = 25;
 
   this.render = function() {
+    var xOffset = 0.5*(this.width - b.measureText(this.value).width);
+
     b.clearRect(0, 0, this.width, this.height);
-    b.fillText(this.value, 0.5*this.width, 0.5*this.height);
+    b.fillText(this.value, xOffset, 0.5*this.height);
+    b.textAlign = 'left';
     b.font = '16px sans-serif';
 
     return b.canvas;
@@ -73,6 +76,7 @@ var Numeral = function() {
 
 var Hand = function() {
   this.angle = -0.5*Math.PI;
+  that = this;
 
   this.render = function() {
     var b = new Buffer(this.width, this.height);
@@ -84,7 +88,7 @@ var Hand = function() {
 
   this.events = {
     click: function(evt) {
-      console.log("Click!");
+      that.stage.debug = !that.stage.debug;
     }
   }
 }
