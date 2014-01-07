@@ -76,7 +76,7 @@ var Clock = (function() {
 
     this.events = {
       click: function(evt) {
-        this.moveTo(evt.canvasX, evt.canvasY, 20);
+        this.moveTo(evt.canvasX, evt.canvasY, 10);
       }.bind(that)
     };
   }
