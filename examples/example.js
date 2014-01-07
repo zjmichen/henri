@@ -16,4 +16,4 @@ window.onload = function() {
 
   shipStage.start();
   clockStage.start();
-}
+};

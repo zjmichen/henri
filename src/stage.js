@@ -1,12 +1,16 @@
 var Stage = (function() {
 
   var StageConstr = function(canvas) {
-    var update, draw, loop, 
+    var that = this,
+        update, draw, loop, 
         layers = [],
         ats = [],
+        events = {},
         mainCtx = canvas.getContext('2d'),
         backBuf,
-        debugGrid = true;
+        debugGrid = true,
+        drawGrid,
+        catchEvent;
 
     this.debug = false;
     this.width = canvas.width;
@@ -35,7 +39,7 @@ var Stage = (function() {
       };
 
       for (evtName in el.events) {
-        document.addEventListener(evtName, el.events[evtName]);
+        this.addEventListener(evtName, el.events[evtName]);
       }
 
       layers[layer].elements.push(el);
@@ -63,6 +67,20 @@ var Stage = (function() {
       }
 
       ats[frameWhen].push(callback);
+    };
+
+    this.addEventListener = function(evtName, callback) {
+      if (events[evtName] === undefined) {
+        events[evtName] = [];
+
+        if (/key/i.test(evtName)) {
+          document.addEventListener(evtName, catchEvent);
+        } else {
+          canvas.addEventListener(evtName, catchEvent);
+        }
+      }
+
+      events[evtName].push(callback);
     };
 
     this.update = function() {
@@ -126,6 +144,19 @@ var Stage = (function() {
 
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);
+
+    catchEvent = function(evt) {
+      if (events[evt.type] === undefined) {
+        console.warn('Tried to process event with no handler: ' + evt.type);
+      } else {
+        evt.canvasX = evt.pageX - canvas.offsetLeft;
+        evt.canvasY = evt.pageY - canvas.offsetTop;
+
+        events[evt.type].forEach(function(handler) {
+          handler(evt);
+        });
+      }
+    };
 
     drawGrid = function(ctx) {
       var width = ctx.canvas.width,
