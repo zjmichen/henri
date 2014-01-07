@@ -8,21 +8,21 @@ Usage
 
 ### Basic Use
 
+*Note:  check the examples for the most up-to-date usage*
+
 Include all the files in src/ in your html. I cat them together with
 `cat src/*.js > examples/henri.js` and then include that.
 
 Initialize the stage:
 
 ```javascript
-window.onload = function() {
   var stage = new Stage(document.getElementById('myCanvas'));
-
 ```
 
 Boom, initialized. You probably want stuff in there, so you can do  this:
 
 ```javascript
-  var asteroid = s.addElement(0, Asteroid, {x: 100, y: 100});
+  var asteroid = stage.addElement(0, Asteroid, {x: 100, y: 100});
 ```
 
 where `Asteroid` is an object constructor that you define.
@@ -49,7 +49,6 @@ When everything is set up, you can start things off:
 
 ```javascript
   stage.start();
-};
 ```
 
 The `Stage` object has the following attributes:  properties width, height,
@@ -97,3 +96,11 @@ A couple of things to note here:
   sequence when the sprite is in that mode. The default mode is 'normal', which
   is empty at first. To create a new mode, simply add images with that mode
   specified.
+
+### Events
+
+TODO
+
+### Element Built-ins
+
+TODO
