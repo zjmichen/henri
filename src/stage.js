@@ -175,6 +175,10 @@ var Stage = (function() {
         }.bind(this));
       }.bind(this));
 
+      if (this.debug.draw.framecount) {
+        drawFramecount(backBuf);
+      }
+
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);
 
@@ -246,7 +250,14 @@ var Stage = (function() {
         ctx.stroke();
         ctx.restore();
       }
-    }
+    };
+
+    drawFramecount = function(ctx) {
+      ctx.font = '18px sans-serif';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.textBaseline = 'top';
+      ctx.fillText(that.frame, 0, 0);
+    };
 
   };
 
