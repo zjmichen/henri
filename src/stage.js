@@ -24,6 +24,7 @@ var Stage = (function() {
         framecount: false,
         events: false,
       },
+      canvas: canvas,
       loop: loop,
       layers: layers,
       ats: ats,
