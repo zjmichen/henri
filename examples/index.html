@@ -3,19 +3,44 @@
   <head>
     <meta charset='utf-8'>
     <title>Henri Examples</title>
+    <script type='text/javascript' src='jquery.js'></script>
+    <script type='text/javascript' src='ide.js'></script>
     <script type='text/javascript' src='henri.js'></script>
-    <script type='text/javascript' src='ship.js'></script>
     <script type='text/javascript' src='clock.js'></script>
     <script type='text/javascript' src='example.js'></script>
 
     <style type='text/css'>
       canvas {
         border: 1px solid black;
+        float: left;
+      }
+
+      #controls {
+        float: left;
       }
     </style>
   </head>
   <body>
     <canvas id='clock' width='500px' height='500px'></canvas>
-    <canvas id='ship' width='500px' height='500px'></canvas>
+    <div id='controls'>
+      <form>
+        <fieldset>
+          <label>
+            <input type='checkbox' class='ide-control draw' name='grid' />
+            Show gridlines
+          </label>
+          <br>
+          <label>
+            <input type='checkbox' class='ide-control draw' name='outlines' />
+            Show outlines
+          </label>
+          <br>
+          <label>
+            <input type='checkbox' class='ide-control draw' name='focus' />
+            Show focus
+          </label>
+        </fieldset>
+      </form>
+    </div>
   </body>
 </html>
