@@ -196,6 +196,11 @@ var Stage = (function() {
           handler(evt);
         });
       }
+
+      evt.stopPropagation();
+      if (!evt.ctrlKey && !evt.altKey) {
+        evt.preventDefault();
+      }
     };
 
     drawGrid = function(ctx) {
