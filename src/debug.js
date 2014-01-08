@@ -1,4 +1,6 @@
 var Debug = function(I) {
+  var eventDrawQ = [];
+
   this.draw = {
     grid: false,
     outlines: false,
@@ -13,6 +15,10 @@ var Debug = function(I) {
   this.ats = I.ats;
   this.events = I.events;
   this.hasFocus = I.hasFocus;
+
+  this.addEvent = function(x, y) {
+    eventDrawQ.push({x: x, y: y, ttl: 50});
+  };
 
   this.drawGrid = function(ctx) {
     var width = ctx.canvas.width,
@@ -68,6 +74,21 @@ var Debug = function(I) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
     ctx.textBaseline = 'top';
     ctx.fillText(frame, 0, 0);
+  };
+
+  this.drawEvents = function(ctx) {
+    eventDrawQ.forEach(function(p) {
+      var opacity = p.ttl / 50;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(200, 135, 135, ' + opacity + ')';
+      ctx.arc(p.x, p.y, 5, 0, 2*Math.PI);
+      ctx.fill();
+
+      p.ttl--;
+      if (p.ttl <= 0) {
+        eventDrawQ.splice(p, 1);
+      }
+    });
   };
 
 };

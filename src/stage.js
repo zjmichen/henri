@@ -177,6 +177,10 @@ var Stage = (function() {
         debug.drawFramecount(backBuf, this.frame);
       }
 
+      if (debug.draw.events) {
+        debug.drawEvents(backBuf);
+      }
+
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);
 
@@ -196,6 +200,10 @@ var Stage = (function() {
       } else if (!/key/i.test(evt.type) || hasFocus ) {
         evt.canvasX = evt.pageX - canvas.offsetLeft;
         evt.canvasY = evt.pageY - canvas.offsetTop;
+
+        if (debugEnabled) {
+          debug.addEvent(evt.canvasX, evt.canvasY);
+        }
 
         events[evt.type].forEach(function(handler) {
           handler(evt);

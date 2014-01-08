@@ -2,8 +2,6 @@ window.onload = function() {
   var clockStage = new Stage(document.getElementById('clock'), true),
       clock;
 
-  clockStage.debug.draw.framecount = true;
-
   clock = clockStage.addElement(0, Clock, {width: 100, height: 200, x: 250, y:250});
 
   clockStage.at(100, function() {
