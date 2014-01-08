@@ -55,12 +55,12 @@ var Ship = function() {
 
     keyup: function(evt) {
       if (evt.keyCode === 38) {
-        sprite.setMode('normal');
-        actions.splice(actions.indexOf(thrust), 1);
+        //sprite.setMode('normal');
+        //actions.splice(actions.indexOf(thrust), 1);
       }
 
       if (actions.indexOf(turnLeft) !== -1) {
-        actions.splice(actions.indexOf(turnLeft), 1);
+        //actions.splice(actions.indexOf(turnLeft), 1);
       }
       if (actions.indexOf(turnRight) !== -1) {
         actions.splice(actions.indexOf(turnRight), 1);
@@ -69,7 +69,7 @@ var Ship = function() {
   };
 
   turnLeft = function() {
-    this.angle -= 0.1;
+    this.angle -= 0.01 * Math.random();
   }.bind(this);
 
   turnRight = function() {

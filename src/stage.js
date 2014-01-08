@@ -8,6 +8,7 @@ var Stage = (function() {
         events = {},
         mainCtx = canvas.getContext('2d'),
         backBuf,
+        hasFocus = false,
         debugGrid = true,
         drawGrid,
         catchEvent;
@@ -19,6 +20,14 @@ var Stage = (function() {
     this.frame = 0;
     this.toroidial = false;
     layers.push(new Layer(this.width, this.height));
+
+    document.addEventListener('click', function(evt) {
+      if (evt.target === canvas) {
+        hasFocus = true;
+      } else {
+        hasFocus = false;
+      }
+    });
 
     backBuf = new Buffer(this.width, this.height);
 
@@ -107,6 +116,12 @@ var Stage = (function() {
 
       if (this.debug) {
         drawGrid(backBuf);
+
+        if (hasFocus) {
+          backBuf.strokeStyle = 'yellow';
+          backBuf.lineWidth = 4;
+          backBuf.strokeRect(0, 0, this.width, this.height);
+        }
       }
 
       layers.forEach(function(layer) {
