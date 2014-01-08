@@ -1,5 +1,5 @@
 window.onload = function() {
-  var clockStage = new Stage(document.getElementById('clock')),
+  var clockStage = new Stage(document.getElementById('clock'), true),
       clock;
 
   clockStage.debug.draw.framecount = true;

@@ -1,6 +1,6 @@
 var Stage = (function() {
 
-  var StageConstr = function(canvas) {
+  var StageConstr = function(canvas, debugEnabled) {
     var that = this,
         loop, 
         layers = [],
@@ -9,6 +9,7 @@ var Stage = (function() {
         mainCtx = canvas.getContext('2d'),
         backBuf,
         hasFocus = false,
+        debug,
         catchEvent;
 
     this.width = canvas.width;
@@ -16,21 +17,18 @@ var Stage = (function() {
     this.frameRate = 60;
     this.frame = 0;
     this.toroidial = false;
-    this.debug = {
-      draw: {
-        grid: false,
-        outlines: false,
-        focus: false,
-        framecount: false,
-        events: false,
-      },
+
+    debug = new Debug({
       canvas: canvas,
       loop: loop,
       layers: layers,
       ats: ats,
       events: events,
-      hasFocus: hasFocus,
-    };
+      hasFocus: hasFocus
+    });
+    if (debugEnabled) {
+      this.debug = debug;
+    }
 
     layers.push(new Layer(this.width, this.height));
 
@@ -127,10 +125,10 @@ var Stage = (function() {
       mainCtx.clearRect(0, 0, this.width, this.height);
       backBuf.clearRect(0, 0, this.width, this.height);
 
-      if (this.debug.draw.grid) {
-        drawGrid(backBuf);
+      if (debug.draw.grid) {
+        debug.drawGrid(backBuf);
       }
-      if (this.debug.draw.focus) {
+      if (debug.draw.focus) {
         if (hasFocus) {
           backBuf.strokeStyle = 'yellow';
           backBuf.lineWidth = 4;
@@ -165,7 +163,7 @@ var Stage = (function() {
           }
           backBuf.drawImage(img, 0, 0);
 
-          if (this.debug.draw.outlines) {
+          if (debug.draw.outlines) {
             backBuf.lineWidth = 2 / el.scale;
             backBuf.strokeStyle = 'rgba(255, 100, 0, 0.8)';
             backBuf.strokeRect(0, 0, img.width, img.height);
@@ -175,17 +173,19 @@ var Stage = (function() {
         }.bind(this));
       }.bind(this));
 
-      if (this.debug.draw.framecount) {
-        drawFramecount(backBuf);
+      if (debug.draw.framecount) {
+        debug.drawFramecount(backBuf, this.frame);
       }
 
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);
 
     this.setDebug = function(opts) {
+      if (!debugEnabled) { return; }
+
       for (var type in opts) {
-        if (this.debug.draw.hasOwnProperty(type)) {
-          this.debug.draw[type] = (opts[type]) ? true : false;
+        if (debug.draw.hasOwnProperty(type)) {
+          debug.draw[type] = (opts[type]) ? true : false;
         }
       }
     };
@@ -201,62 +201,6 @@ var Stage = (function() {
           handler(evt);
         });
       }
-    };
-
-    drawGrid = function(ctx) {
-      var width = ctx.canvas.width,
-          height = ctx.canvas.height,
-          tenColor = 'rgba(127, 127, 255, 0.5)',
-          fiftyColor = 'rgba(0, 0, 255, 0.5)',
-          hundredColor = 'rgba(0, 0, 255, 0.8)';
-
-      for (i = 0; i < width; i+=10) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = tenColor;
-
-        if (i % 50 === 0) {
-          ctx.strokeStyle = fiftyColor;
-        }
-        if (i % 100 === 0) {
-          ctx.strokeStyle = hundredColor;
-        }
-
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i, height);
-
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      for (i = 0; i < height; i += 10) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.lineWidth = 2;
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = tenColor;
-
-        if (i % 50 === 0) {
-          ctx.strokeStyle = fiftyColor;
-        }
-        if (i % 100 === 0) {
-          ctx.strokeStyle = hundredColor;
-        }
-
-        ctx.moveTo(0, i);
-        ctx.lineTo(width, i);
-
-        ctx.stroke();
-        ctx.restore();
-      }
-    };
-
-    drawFramecount = function(ctx) {
-      ctx.font = '18px sans-serif';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-      ctx.textBaseline = 'top';
-      ctx.fillText(that.frame, 0, 0);
     };
 
   };
