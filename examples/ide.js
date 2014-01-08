@@ -1,18 +1,19 @@
 var Ide = (function($) {
 
-  var _Ide = function(stage, controls) {
+  var _Ide = function(stage, controlsSel) {
     var canvas = $(stage.canvas),
-        controls = $(controls).find('.ide-control');
+        controls = {
+          draw: $(controlsSel).find('.ide-control.draw'),
+          start: $(controlsSel).find('.ide-control.start'),
+          stop: $(controlsSel).find('.ide-control.stop')
+        };
 
-    controls.each(function(i, control) {
-      control = $(control);
-      if (control.attr('data-draw')) {
-        control.attr('data-draw').split(/\s+/).forEach(function(type) {
-          control.click(function(evt) {
-            stage.debug.draw[type] = !stage.debug.draw[type];
-          });
-        });
-      }
+    controls.draw.each(function(i, control) {
+      var type = $(control).attr('name');
+      $(control).click(function(evt) {
+        console.log(control);
+        stage.debug.draw[type] = !stage.debug.draw[type];
+      });
     });
   }
 

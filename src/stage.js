@@ -2,7 +2,7 @@ var Stage = (function() {
 
   var StageConstr = function(canvas) {
     var that = this,
-        update, draw, loop, 
+        loop, 
         layers = [],
         ats = [],
         events = {},
