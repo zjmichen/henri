@@ -10,11 +10,13 @@ var Ide = (function($) {
 
     controls.draw.each(function(i, control) {
       var type = $(control).attr('name');
+      stage.debug.draw[type] = $(control)[0].checked;
       $(control).click(function(evt) {
-        console.log(control);
         stage.debug.draw[type] = !stage.debug.draw[type];
       });
     });
+
+    stage.debug.draw.events = true;
   }
 
   return _Ide;
