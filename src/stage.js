@@ -163,7 +163,7 @@ var Stage = (function() {
     catchEvent = function(evt) {
       if (events[evt.type] === undefined) {
         console.warn('Tried to process event with no handler: ' + evt.type);
-      } else {
+      } else if (!/key/i.test(evt.type) || hasFocus ) {
         evt.canvasX = evt.pageX - canvas.offsetLeft;
         evt.canvasY = evt.pageY - canvas.offsetTop;
 
