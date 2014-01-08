@@ -1,4 +1,4 @@
-var Debug = function(I) {
+var Debug = function(stage, priv) {
   var eventDrawQ = [];
 
   this.draw = {
@@ -9,16 +9,29 @@ var Debug = function(I) {
     events: false,
   };
 
-  this.canvas = I.canvas;
-  this.loop = I.loop;
-  this.layers = I.layers;
-  this.ats = I.ats;
-  this.events = I.events;
-  this.hasFocus = I.hasFocus;
+  this.stage = stage;
 
   this.addEvent = function(x, y) {
     eventDrawQ.push({x: x, y: y, ttl: 50});
   };
+
+  this.drawBelow = function(ctx) {
+    if (this.draw.grid) {
+      this.drawGrid(ctx);
+    }
+  };
+
+  this.drawAbove = function(ctx) {
+    if (this.draw.framecount) {
+      this.drawFramecount(ctx, this.stage.frame);
+    }
+    if (this.draw.events) {
+      this.drawEvents(ctx);
+    }
+    if (this.draw.focus) {
+      this.drawFocus(ctx);
+    }
+  }
 
   this.drawGrid = function(ctx) {
     var width = ctx.canvas.width,
@@ -69,6 +82,16 @@ var Debug = function(I) {
     }
   };
 
+  this.drawFocus = function(ctx) {
+    if (priv.hasFocus) {
+      ctx.strokeStyle = 'rgba(255, 255, 0, 0.6)';
+    } else {
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+    }
+    ctx.lineWidth = 4;
+    ctx.strokeRect(0, 0, this.stage.width, this.stage.height);
+  };
+
   this.drawFramecount = function(ctx, frame) {
     ctx.font = '18px sans-serif';
     ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
@@ -89,6 +112,12 @@ var Debug = function(I) {
         eventDrawQ.splice(p, 1);
       }
     });
+  };
+
+  this.drawOutline = function(ctx, el, img) {
+    ctx.lineWidth = 2 / el.scale;
+    ctx.strokeStyle = 'rgba(255, 100, 0, 0.6)';
+    ctx.strokeRect(0, 0, img.width, img.height);
   };
 
 };
