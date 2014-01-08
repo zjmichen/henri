@@ -9,16 +9,28 @@ var Stage = (function() {
         mainCtx = canvas.getContext('2d'),
         backBuf,
         hasFocus = false,
-        debugGrid = true,
-        drawGrid,
         catchEvent;
 
-    this.debug = false;
     this.width = canvas.width;
     this.height = canvas.height;
     this.frameRate = 60;
     this.frame = 0;
     this.toroidial = false;
+    this.debug = {
+      draw: {
+        grid: false,
+        outlines: false,
+        focus: false,
+        framecount: false,
+        events: false,
+      },
+      loop: loop,
+      layers: layers,
+      ats: ats,
+      events: events,
+      hasFocus: hasFocus,
+    };
+
     layers.push(new Layer(this.width, this.height));
 
     document.addEventListener('click', function(evt) {
@@ -114,11 +126,16 @@ var Stage = (function() {
       mainCtx.clearRect(0, 0, this.width, this.height);
       backBuf.clearRect(0, 0, this.width, this.height);
 
-      if (this.debug) {
+      if (this.debug.draw.grid) {
         drawGrid(backBuf);
-
+      }
+      if (this.debug.draw.focus) {
         if (hasFocus) {
           backBuf.strokeStyle = 'yellow';
+          backBuf.lineWidth = 4;
+          backBuf.strokeRect(0, 0, this.width, this.height);
+        } else {
+          backBuf.strokeStyle = 'gray';
           backBuf.lineWidth = 4;
           backBuf.strokeRect(0, 0, this.width, this.height);
         }
@@ -147,7 +164,7 @@ var Stage = (function() {
           }
           backBuf.drawImage(img, 0, 0);
 
-          if (this.debug) {
+          if (this.debug.draw.outlines) {
             backBuf.lineWidth = 2 / el.scale;
             backBuf.strokeStyle = 'rgba(255, 100, 0, 0.8)';
             backBuf.strokeRect(0, 0, img.width, img.height);
@@ -159,6 +176,14 @@ var Stage = (function() {
 
       mainCtx.drawImage(backBuf.canvas, 0, 0);
     }.bind(this);
+
+    this.setDebug = function(opts) {
+      for (var type in opts) {
+        if (this.debug.draw.hasOwnProperty(type)) {
+          this.debug.draw[type] = (opts[type]) ? true : false;
+        }
+      }
+    };
 
     catchEvent = function(evt) {
       if (events[evt.type] === undefined) {

@@ -4,10 +4,13 @@ window.onload = function() {
       clock;
 
   shipStage.toroidial = true;
-  shipStage.debug = true;
+  shipStage.setDebug({
+    grid: true,
+    outlines: true,
+    focus: true
+  });
   window.ship = shipStage.addElement(0, Ship, {x: 100, y: 100});
 
-  clockStage.debug = true;
   clock = clockStage.addElement(0, Clock, {width: 100, height: 200, x: 250, y:250});
 
   clockStage.at(100, function() {
@@ -16,4 +19,7 @@ window.onload = function() {
 
   shipStage.start();
   clockStage.start();
+
+  window.shipStage = shipStage;
+  window.clockStage = clockStage;
 };
