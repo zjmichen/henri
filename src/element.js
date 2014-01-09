@@ -75,6 +75,10 @@ var Element = (function() {
       var thisUpdate,
           startFrame = this.stage.frame;
 
+      if (isNaN(frames)) {
+        frames = 1;
+      }
+
       thisUpdate = function() {
         var prop,
             framesLeft = (startFrame + frames) - this.stage.frame;
