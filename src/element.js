@@ -34,22 +34,32 @@ var Element = (function() {
     };
 
     this.moveTo = function(x, y, frames) {
+      this.addLinearTransform({x: x, y: y}, frames);
+    };
+
+    this.addLinearTransform = function(props, frames) {
       var thisUpdate,
           startFrame = this.stage.frame;
 
       thisUpdate = function() {
+        var prop,
+            framesLeft = (startFrame + frames) - this.stage.frame;
+
         if (this.stage.frame >= startFrame + frames) {
           if (thisUpdate.prevUpdate !== undefined) {
             thisUpdate.prevUpdate.nextUpdate = thisUpdate.nextUpdate;
           } else {
             this.update = thisUpdate.nextUpdate;
           }
-        }  else {
-          this.x += (x - this.x) / ((startFrame + frames) - this.stage.frame);
-          this.y += (y - this.y) / ((startFrame + frames) - this.stage.frame);
-          thisUpdate.nextUpdate.call(this);
+        } else {
+          for (prop in props) {
+            if (this[prop] !== undefined) {
+              this[prop] += (props[prop] - this[prop]) / framesLeft;
+              thisUpdate.nextUpdate.call(this);
+            }
+          }
         }
-      }
+      };
 
       thisUpdate.nextUpdate = this.update;
       thisUpdate.nextUpdate.prevUpdate = thisUpdate;
