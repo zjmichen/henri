@@ -1,16 +1,17 @@
 var Clock = (function() {
 
   var _Clock = function(I) {
-    var buffer = new Buffer(500, 500),
-        width = (I.width === undefined) ? 500 : I.width,
-        height = (I.height === undefined) ? 500 : I.height,
-        stage = new Stage(buffer.canvas),
-        aspectRatio = height / width,
-        that = this,
+    var that = this,
+        buffer, stage, aspectRatio,
         i, n;
 
-    this.scaleX = width / 500;
-    this.scaleY = height / 500;
+    this.width = 500;
+    this.height = 500;
+    this.realWidth = (I.width === undefined) ? width : I.width;
+    this.realHeight = (I.height === undefined) ? height : I.height;
+    aspectRatio = this.height / this.width;
+    buffer = new Buffer(this.width, this.height);
+    stage = new Stage(buffer.canvas);
 
     for (i = 0; i < 12; i++) {
       n = stage.addElement(0, Numeral, {});

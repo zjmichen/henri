@@ -3,8 +3,8 @@ var Element = (function() {
   var ElementConstr = function(I) {
     var prop,
         updates = [],
-        width = 100,
-        height = 100;
+        realWidth = 100,
+        realHeight = 100;
 
     this.x = 0;
     this.y = 0;
@@ -14,18 +14,18 @@ var Element = (function() {
     this.drawPosition = 'center';
     this.width = 100;
     this.height = 100;
-    Object.defineProperty(this, 'width', {
-      get: function() { return width; },
+    Object.defineProperty(this, 'realWidth', {
+      get: function() { return realWidth; },
       set: function(w) {
         this.scaleX = w / this.render().width;
-        width = w;
+        realWidth = w;
       }
     });
-    Object.defineProperty(this, 'height', {
-      get: function() { return height; },
+    Object.defineProperty(this, 'realHeight', {
+      get: function() { return realHeight; },
       set: function(h) {
         this.scaleY = h / this.render().height;
-        height = h;
+        realHeight = h;
       }
     });
     Object.defineProperty(this, 'scale', {
@@ -41,10 +41,10 @@ var Element = (function() {
     };
 
     this.render = function() {
-      var b = new Buffer(width, height);
-      b.clearRect(0, 0, width, height);
+      var b = new Buffer(this.width, this.height);
+      b.clearRect(0, 0, this.width, this.height);
       b.fillStyle = 'black';
-      b.fillRect(0, 0, width, height);
+      b.fillRect(0, 0, this.width, this.height);
 
       return b.canvas;
     };
@@ -68,7 +68,7 @@ var Element = (function() {
         h = w * (this.height / this.width);
       }
 
-      this.addLinearTransform({width: w, height: h}, frames);
+      this.addLinearTransform({realWidth: w, realHeight: h}, frames);
     };
 
     this.addLinearTransform = function(props, frames) {

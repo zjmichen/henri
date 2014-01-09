@@ -8,6 +8,15 @@ window.onload = function() {
     clock.moveTo(105, 105, 50);
   });
 
+  clockStage.at(200, function() {
+    clock.addLinearTransform({
+      x: 250,
+      y: 250,
+      realWidth: 500,
+      realHeight: 500
+    }, 100);
+  });
+
   clockStage.start();
 
   window.clockStage = clockStage;
