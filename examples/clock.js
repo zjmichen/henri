@@ -9,10 +9,8 @@ var Clock = (function() {
         that = this,
         i, n;
 
-    this.scale = width / 500;
-    if (width !== height) {
-      buffer.canvas.height *= aspectRatio;
-    }
+    this.scaleX = width / 500;
+    this.scaleY = height / 500;
 
     for (i = 0; i < 12; i++) {
       n = stage.addElement(0, Numeral, {});
@@ -67,7 +65,6 @@ var Clock = (function() {
     this.update = stage.update;
     this.render = function() {
       buffer.save();
-      buffer.scale(1, aspectRatio);
       stage.draw();
       buffer.restore();
 

@@ -139,7 +139,7 @@ var Stage = (function() {
           backBuf.save();
           backBuf.translate(x, y);
           backBuf.rotate(el.angle);
-          backBuf.scale(el.scale, el.scale);
+          backBuf.scale(el.scaleX, el.scaleY);
 
           img = el.render();
 

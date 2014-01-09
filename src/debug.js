@@ -96,7 +96,7 @@ var Debug = function(stage, priv) {
     ctx.font = '18px sans-serif';
     ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
     ctx.textBaseline = 'top';
-    ctx.fillText(frame, 0, 0);
+    ctx.fillText(frame, 8, 8);
   };
 
   this.drawEvents = function(ctx) {

@@ -7,10 +7,19 @@ var Element = (function() {
     this.x = 0;
     this.y = 0;
     this.angle = 0;
-    this.scale = 1;
+    this.scaleX = 1;
+    this.scaleY = 1;
     this.width = 100;
     this.height = 100;
     this.drawPosition = 'center';
+    Object.defineProperty(this, 'scale', {
+      get: function() { return this.scaleX; },
+      set: function(scale) {
+        var scaleRatio = this.scaleY / this.scaleX;
+        this.scaleX = scale;
+        this.scaleY = scale * scaleRatio;
+      }
+    })
 
     this.update = function() {
     };

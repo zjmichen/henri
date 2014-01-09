@@ -11,6 +11,7 @@ window.onload = function() {
   clockStage.start();
 
   window.clockStage = clockStage;
+  window.clock = clock;
 
   var ide = new Ide(clockStage, '#controls');
 };
