@@ -34,21 +34,19 @@ var Element = (function() {
     };
 
     this.moveTo = function(x, y, frames) {
-      var dx = (x - this.x) / frames,
-          dy = (y - this.y) / frames,
-          endFrame = this.stage.frame + frames,
-          thisUpdate;
+      var thisUpdate,
+          startFrame = this.stage.frame;
 
       thisUpdate = function() {
-        if (this.stage.frame >= endFrame) {
+        if (this.stage.frame >= startFrame + frames) {
           if (thisUpdate.prevUpdate !== undefined) {
             thisUpdate.prevUpdate.nextUpdate = thisUpdate.nextUpdate;
           } else {
             this.update = thisUpdate.nextUpdate;
           }
         }  else {
-          this.x += dx;
-          this.y += dy;
+          this.x += (x - this.x) / ((startFrame + frames) - this.stage.frame);
+          this.y += (y - this.y) / ((startFrame + frames) - this.stage.frame);
           thisUpdate.nextUpdate.call(this);
         }
       }
