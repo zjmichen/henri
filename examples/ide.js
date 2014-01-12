@@ -2,6 +2,8 @@ var Ide = (function($) {
 
   var _Ide = function(stage, controlsSel) {
     var canvas = $(stage.canvas),
+        timelineCanvas = $('#timeline')[0],
+        timeline,
         controls = {
           draw: $(controlsSel).find('.ide-control.draw'),
           start: $(controlsSel).find('.ide-control.start'),
@@ -16,8 +18,49 @@ var Ide = (function($) {
       });
     });
 
-    stage.debug.draw.events = true;
+    timeline = new Stage(timelineCanvas, {});
+    timeline.addElement(0, TimelineBg, {
+      width: timeline.width, 
+      height: timeline.height,
+      x: 0.5*timeline.width,
+      y: 0.5*timeline.height
+    });
+
+    timeline.start();
   }
 
   return _Ide;
 })(jQuery);
+
+var TimelineBg = function(I) {
+  var b = new Buffer(I.width, I.height),
+      that = this;
+
+  this.cursor = 0;
+
+  this.render = function() {
+    var i;
+
+    b.clearRect(0, 0, this.width, this.height);
+
+    b.strokeStyle = 'rgba(0, 0, 255, 0.8)';
+    b.lineWidth = 1;
+    b.beginPath();
+    for (i = 0; i < this.width; i+= 10) {
+      b.moveTo(i, 0);
+      b.lineTo(i, this.height);
+    }
+    b.stroke();
+
+    b.fillStyle = 'rgba(0, 0, 255, 0.5)';
+    b.fillRect(this.cursor*10, 0, 10, this.height);
+
+    return b.canvas;
+  };
+
+  this.events = {
+    click: function(evt) {
+      this.cursor = Math.floor(evt.canvasX / 10);
+    }.bind(that)
+  };
+};
