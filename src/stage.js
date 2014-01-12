@@ -51,8 +51,10 @@ var Stage = (function() {
 
       el.stage = this;
       el.removeFromStage = function() {
-        priv.layers[layer].elements.splice(Layers[layer].elements.indexOf(el), 1);
+        priv.layers[layer].elements.splice(priv.layers[layer].elements.indexOf(el), 1);
       };
+      el.type = ElementType;
+      el.defaults = I;
 
       for (evtName in el.events) {
         this.addEventListener(evtName, el.events[evtName]);
@@ -104,7 +106,6 @@ var Stage = (function() {
         priv.ats[this.frame].forEach(function(callback) {
           callback();
         });
-        delete priv.ats[this.frame];
       }
 
       priv.layers.forEach(function(layer) {
@@ -171,6 +172,17 @@ var Stage = (function() {
           debug.draw[type] = (opts[type]) ? true : false;
         }
       }
+    };
+
+    this.reset = function() {
+      priv.layers.forEach(function(layer, layerNum) {
+        layer.elements.forEach(function(el) {
+          el.removeFromStage();
+          that.addElement(layerNum, el.type, el.defaults);
+        });
+      });
+
+      this.frame = 0;
     };
 
     catchEvent = function(evt) {

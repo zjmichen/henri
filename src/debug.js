@@ -9,6 +9,8 @@ var Debug = function(stage, priv) {
     events: false,
   };
 
+  this.priv = priv;
+
   this.stage = stage;
 
   this.addEvent = function(x, y) {
