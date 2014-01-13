@@ -14,8 +14,7 @@ var Clock = (function() {
     stage = new Stage(buffer.canvas);
 
     for (i = 0; i < 12; i++) {
-      n = stage.addElement(0, Numeral, {});
-      n.value = i+1;
+      n = stage.addElement(0, Numeral, {value: i+1});
 
       n.x = 0.5*(stage.width - n.width) * 
           Math.sin( (i+1) / 12 * 2*Math.PI) + 0.5*stage.width;
@@ -79,18 +78,16 @@ var Clock = (function() {
     };
   }
 
-  var Numeral = function() {
+  var Numeral = function(I) {
     var b = new Buffer(50, 50);
-    this.value = 0;
+    this.value = I.value || 0;
     this.y = 100;
     this.width = 50;
     this.height = 50;
 
-    this.render = function() {
-      b.clearRect(0, 0, this.width, this.height);
-      b.fillText(this.value, 0.5*this.width, 0.5*this.height);
-      b.font = '16px sans-serif';
+    b.fillText(this.value, 0.5*this.width, 0.5*this.height);
 
+    this.render = function() {
       return b.canvas;
     };
   };
