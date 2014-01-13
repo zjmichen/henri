@@ -184,6 +184,16 @@ var Stage = (function() {
       this.frame = 0;
     };
 
+    this.goToFrame = function(f) {
+      var i;
+      this.reset();
+      for (i = 0; i < f; i++) {
+        this.update();
+      }
+
+      this.draw();
+    };
+
     catchEvent = function(evt) {
       if (priv.events[evt.type] === undefined) {
         console.warn('Tried to process event with no handler: ' + evt.type);
