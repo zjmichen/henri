@@ -177,8 +177,7 @@ var Stage = (function() {
     this.reset = function() {
       priv.layers.forEach(function(layer, layerNum) {
         layer.elements.forEach(function(el) {
-          el.removeFromStage();
-          that.addElement(layerNum, el.type, el.defaults);
+         el.type.call(el, el.defaults);
         });
       });
 
