@@ -70,12 +70,14 @@ var Stage = (function() {
       var that = this,
           delay = 1000 / this.frameRate;
 
-      priv.loop = setInterval(function() {
-        that.update();
-        that.draw();
-      }, delay);
+      if (!this.running) {
+        priv.loop = setInterval(function() {
+          that.update();
+          that.draw();
+        }, delay);
 
-      this.running = true;
+        this.running = true;
+      }
     };
 
     this.stop = function() {
@@ -89,6 +91,12 @@ var Stage = (function() {
       }
 
       priv.ats[frameWhen].push(callback);
+    };
+
+    this.removeAt = function(frameWhen, cbNum) {
+      if (priv.ats[frameWhen] !== undefined) {
+        priv.ats[frameWhen].splice(cbNum, 1);
+      }
     };
 
     this.addEventListener = function(evtName, callback) {

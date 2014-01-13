@@ -76,6 +76,9 @@ var Timeline = function(I) {
         && scroll < I.numFrames - framesVisible) {
       scroll = this.cursor - framesVisible + 10;
     }
+    if (this.cursor < scroll) {
+      scroll = this.cursor;
+    }
 
     this.x = -10*scroll;
   };
@@ -95,7 +98,7 @@ var Timeline = function(I) {
         b.fillStyle = 'black';
         b.fillText(i, 10*i, 10);
       }
-      if (ats[i] !== undefined) {
+      if (ats[i] !== undefined && ats[i].length > 0) {
         b.fillStyle = 'rgba(127, 127, 0, 0.5)';
         b.fillRect(10*i, 0, 10, this.height);
       }
@@ -114,13 +117,24 @@ var Timeline = function(I) {
       this.cursor = boxNum;
       stage.stop();
       stage.goToFrame(boxNum);
-      if (ats[boxNum] !== undefined) {
+
+      if (ats[boxNum] !== undefined && ats[boxNum].length > 0) {
         $('#ats ul').empty();
-        ats[boxNum].forEach(function(at) {
+        ats[boxNum].forEach(function(at, atNum) {
+          var removeBtn = $('<a href="#">&times;</a>'),
+              li = $('<li><pre>' + at + '</pre></li>');
+          li.append(removeBtn);
+          $('#ats ul').append(li);
+          removeBtn.click(function() {
+            stage.removeAt(boxNum, atNum);
+            li.fadeOut();
+          });
           console.log(at);
-          $('#ats ul').append('<li><pre>' + at + '</pre>');
         });
+      } else {
+        $('#ats ul').empty();
       }
+
     }.bind(that)
   };
 };
