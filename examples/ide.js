@@ -1,7 +1,8 @@
 var Ide = (function($) {
 
   var _Ide = function(stage, controlsSel) {
-    var canvas = $(stage.canvas),
+    var that = this,
+        canvas = $(stage.canvas),
         timelineCanvas = $('#timeline')[0],
         timelineStage,
         controls = {
@@ -16,6 +17,7 @@ var Ide = (function($) {
 
     addAtBtn.click(function() {
       eval('stage.at(' + stage.frame + ', function() {\n' + addAt.val() + '\n});');
+      that.showAts(stage.frame);
     });
 
     controls.draw.each(function(i, control) {
@@ -54,8 +56,30 @@ var Ide = (function($) {
       target: stage,
       numFrames: stage.debug.priv.ats.length + 1,
       drawPosition: 'corner',
-      ats: stage.debug.priv.ats
+      ats: stage.debug.priv.ats,
+      ide: this
     });
+
+    this.showAts = function(frame) {
+      var ats = stage.debug.priv.ats;
+
+      if (ats[frame] !== undefined && ats[frame].length > 0) {
+        $('#ats ul').empty();
+        ats[frame].forEach(function(at, atNum) {
+          var removeBtn = $('<a href="#">&times;</a>'),
+              li = $('<li><pre>' + at + '</pre></li>');
+          li.append(removeBtn);
+          $('#ats ul').append(li);
+          removeBtn.click(function() {
+            stage.removeAt(frame, atNum);
+            li.fadeOut();
+          });
+          console.log(at);
+        });
+      } else {
+        $('#ats ul').empty();
+      }
+    };
 
     stage.draw();
     timelineStage.start();
@@ -123,22 +147,7 @@ var Timeline = function(I) {
       stage.stop();
       stage.goToFrame(boxNum);
 
-      if (ats[boxNum] !== undefined && ats[boxNum].length > 0) {
-        $('#ats ul').empty();
-        ats[boxNum].forEach(function(at, atNum) {
-          var removeBtn = $('<a href="#">&times;</a>'),
-              li = $('<li><pre>' + at + '</pre></li>');
-          li.append(removeBtn);
-          $('#ats ul').append(li);
-          removeBtn.click(function() {
-            stage.removeAt(boxNum, atNum);
-            li.fadeOut();
-          });
-          console.log(at);
-        });
-      } else {
-        $('#ats ul').empty();
-      }
+      I.ide.showAts(boxNum);
 
     }.bind(that)
   };
