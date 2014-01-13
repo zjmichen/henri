@@ -70,14 +70,13 @@ var Stage = (function() {
       var that = this,
           delay = 1000 / this.frameRate;
 
-      if (!this.running) {
+      if (this.running === false) {
         priv.loop = setInterval(function() {
           that.update();
           that.draw();
         }, delay);
-
-        this.running = true;
       }
+      this.running = true;
     };
 
     this.stop = function() {
@@ -208,6 +207,8 @@ var Stage = (function() {
     };
 
     catchEvent = function(evt) {
+      if (!that.running) { return; }
+
       if (priv.events[evt.type] === undefined) {
         console.warn('Tried to process event with no handler: ' + evt.type);
       } else if (!/key/i.test(evt.type) || priv.hasFocus ) {
