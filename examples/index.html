@@ -19,6 +19,26 @@
       #controls {
         float: left;
       }
+
+      #ats {
+        border: 1px solid black;
+        height: 300px;
+        width: 300px;
+        overflow: auto;
+      }
+
+      #ats ul {
+        margin: 5px;
+        padding: 0px;
+        list-style-type: none;
+      }
+
+      #ats li {
+        border: 1px dashed black;
+        background: rgba(127, 127, 0, 0.5);
+        padding: 0px;
+        margin: 2px 0px;
+      }
     </style>
   </head>
   <body>
@@ -53,6 +73,9 @@
           <button type='button' class='ide-control reset'>Reset</button>
         </fieldset>
       </form>
+      <div id='ats'>
+        <ul></ul>
+      </div>
     </div>
     <div>
       <canvas id='timeline' width='800px' height='50px'></canvas>

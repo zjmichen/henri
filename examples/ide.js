@@ -48,7 +48,8 @@ var Ide = (function($) {
       y: 0,
       target: stage,
       numFrames: stage.debug.priv.ats.length + 1,
-      drawPosition: 'corner'
+      drawPosition: 'corner',
+      ats: stage.debug.priv.ats
     });
 
     stage.draw();
@@ -63,7 +64,8 @@ var Timeline = function(I) {
       that = this,
       stage = I.target,
       scroll = 0,
-      framesVisible = I.width / 10;
+      framesVisible = I.width / 10,
+      ats = I.ats;
 
   this.cursor = 0;
 
@@ -93,6 +95,10 @@ var Timeline = function(I) {
         b.fillStyle = 'black';
         b.fillText(i, 10*i, 10);
       }
+      if (ats[i] !== undefined) {
+        b.fillStyle = 'rgba(127, 127, 0, 0.5)';
+        b.fillRect(10*i, 0, 10, this.height);
+      }
     }
     b.stroke();
 
@@ -108,6 +114,13 @@ var Timeline = function(I) {
       this.cursor = boxNum;
       stage.stop();
       stage.goToFrame(boxNum);
+      if (ats[boxNum] !== undefined) {
+        $('#ats ul').empty();
+        ats[boxNum].forEach(function(at) {
+          console.log(at);
+          $('#ats ul').append('<li><pre>' + at + '</pre>');
+        });
+      }
     }.bind(that)
   };
 };
