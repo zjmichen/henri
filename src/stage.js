@@ -20,6 +20,7 @@ var Stage = (function() {
     this.frameRate = 60;
     this.frame = 0;
     this.toroidial = false;
+    this.running = false;
 
     debug = new Debug(this, priv);
     if (debugEnabled) {
@@ -73,10 +74,13 @@ var Stage = (function() {
         that.update();
         that.draw();
       }, delay);
+
+      this.running = true;
     };
 
     this.stop = function() {
       clearInterval(priv.loop);
+      this.running = false;
     };
 
     this.at = function(frameWhen, callback) {
