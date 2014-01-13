@@ -51,6 +51,9 @@
     </style>
   </head>
   <body>
+    <div>
+      <canvas id='timeline' width='800px' height='50px'></canvas>
+    </div>
     <canvas id='clock' width='500px' height='500px'></canvas>
     <div id='controls'>
       <form>
@@ -83,11 +86,16 @@
         </fieldset>
       </form>
       <div id='ats'>
+        <strong>Actions</strong>
         <ul></ul>
       </div>
-    </div>
-    <div>
-      <canvas id='timeline' width='800px' height='50px'></canvas>
+      <div>
+        <strong>New action</strong>
+        <br>
+        <textarea rows='4' cols='40' id='addAt'></textarea>
+        <br>
+        <button type='butotn' id='addAtBtn'>Add</button>
+      </div>
     </div>
   </body>
 </html>

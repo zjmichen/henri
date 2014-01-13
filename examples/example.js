@@ -17,7 +17,9 @@ window.onload = function() {
     }, 100);
   });
 
-  clockStage.at(300, clockStage.stop);
+  clockStage.at(300, function() {
+    clockStage.stop();
+  });
 
   window.clockStage = clockStage;
   window.clock = clock;

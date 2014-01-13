@@ -11,7 +11,12 @@ var Ide = (function($) {
           step: $(controlsSel).find('.ide-control.step'),
           reset: $(controlsSel).find('.ide-control.reset')
         },
-        lastFrame;
+        addAt = $('#addAt'),
+        addAtBtn = $('#addAtBtn');
+
+    addAtBtn.click(function() {
+      eval('stage.at(' + stage.frame + ', function() {\n' + addAt.val() + '\n});');
+    });
 
     controls.draw.each(function(i, control) {
       var type = $(control).attr('name');
@@ -76,8 +81,8 @@ var Timeline = function(I) {
         && scroll < I.numFrames - framesVisible) {
       scroll = this.cursor - framesVisible + 10;
     }
-    if (this.cursor < scroll) {
-      scroll = this.cursor;
+    if (this.cursor < (scroll + 10)) {
+      scroll = Math.max(this.cursor - 10, 0);
     }
 
     this.x = -10*scroll;
