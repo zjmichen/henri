@@ -14,28 +14,34 @@ var Element = (function() {
     this.drawPosition = 'center';
     this.width = 100;
     this.height = 100;
-    Object.defineProperty(this, 'realWidth', {
-      get: function() { return realWidth; },
-      set: function(w) {
-        this.scaleX = w / this.render().width;
-        realWidth = w;
-      }
-    });
-    Object.defineProperty(this, 'realHeight', {
-      get: function() { return realHeight; },
-      set: function(h) {
-        this.scaleY = h / this.render().height;
-        realHeight = h;
-      }
-    });
-    Object.defineProperty(this, 'scale', {
-      get: function() { return this.scaleX; },
-      set: function(scale) {
-        var scaleRatio = this.scaleY / this.scaleX;
-        this.scaleX = scale;
-        this.scaleY = scale * scaleRatio;
-      }
-    });
+    if (this.realWidth === undefined) {
+      Object.defineProperty(this, 'realWidth', {
+        get: function() { return realWidth; },
+        set: function(w) {
+          this.scaleX = w / this.render().width;
+          realWidth = w;
+        }
+      });
+    }
+    if (this.realHeight === undefined) {
+      Object.defineProperty(this, 'realHeight', {
+        get: function() { return realHeight; },
+        set: function(h) {
+          this.scaleY = h / this.render().height;
+          realHeight = h;
+        }
+      });
+    }
+    if (this.scale === undefined) {
+      Object.defineProperty(this, 'scale', {
+        get: function() { return this.scaleX; },
+        set: function(scale) {
+          var scaleRatio = this.scaleY / this.scaleX;
+          this.scaleX = scale;
+          this.scaleY = scale * scaleRatio;
+        }
+      });
+    }
 
     this.update = function() {
     };
