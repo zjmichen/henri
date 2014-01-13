@@ -3,7 +3,7 @@ var Ide = (function($) {
   var _Ide = function(stage, controlsSel) {
     var canvas = $(stage.canvas),
         timelineCanvas = $('#timeline')[0],
-        timeline,
+        timelineStage,
         controls = {
           draw: $(controlsSel).find('.ide-control.draw'),
           start: $(controlsSel).find('.ide-control.start'),
@@ -18,21 +18,29 @@ var Ide = (function($) {
       });
     });
 
-    timeline = new Stage(timelineCanvas, {});
-    timeline.addElement(0, TimelineBg, {
+    controls.start.click(function() {
+      stage.start();
+    });
+
+    controls.stop.click(function() {
+      stage.stop();
+    });
+
+    timelineStage = new Stage(timelineCanvas, {});
+    timelineStage.addElement(0, Timeline, {
       width: timeline.width, 
       height: timeline.height,
       x: 0.5*timeline.width,
       y: 0.5*timeline.height
     });
 
-    timeline.start();
+    timelineStage.start();
   }
 
   return _Ide;
 })(jQuery);
 
-var TimelineBg = function(I) {
+var Timeline = function(I) {
   var b = new Buffer(I.width, I.height),
       that = this;
 
