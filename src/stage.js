@@ -9,8 +9,6 @@ var Stage = (function() {
           events: {},
           hasFocus: false,
           loop: undefined,
-          socket: undefined,
-          socketEnabled: false,
           canvas: canvas
         },
         mainCtx = canvas.getContext('2d'),
@@ -24,6 +22,8 @@ var Stage = (function() {
     this.frame = 0;
     this.toroidial = false;
     this.running = false;
+    this.socket = undefined;
+    this.socketEnabled = false;
 
     debug = new Debug(this, priv);
     if (debugEnabled) {
@@ -147,9 +147,15 @@ var Stage = (function() {
       priv.events[evtName].push(callback);
     };
 
-    this.initSocket = function(io, server) {
-      priv.socket = new Socket(io, server);
-      priv.socket.init(true);
+    this.initSocket = function(io, server, logMessages) {
+      this.socket = io.connect(server);
+
+      if (logMessages) {
+        this.socket.on('message', function(msg) {
+          console.log(msg);
+        });
+      }
+
       priv.socketEnabled = true;
     };
 
