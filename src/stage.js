@@ -101,7 +101,7 @@ var Stage = (function() {
 
     this.addKeyFrame = function(frameWhen, obj, state) {
       var lastKeyFrame = Math.max(frameWhen - 1, 0),
-          i, frameDiff;
+          i, frameDiff, length;
 
       for (i = lastKeyFrame; i >= 0; i--) {
         if (priv.keyFrames[i] !== undefined) {
@@ -111,8 +111,6 @@ var Stage = (function() {
       }
 
       length = frameWhen - lastKeyFrame;
-
-      console.log(lastKeyFrame + ' + '  + length + ' = ' + frameWhen);
 
       if (priv.keyFrames[frameWhen] === undefined) {
         priv.keyFrames[frameWhen] = [];
@@ -125,8 +123,6 @@ var Stage = (function() {
       });
 
       this.at(lastKeyFrame, function() {
-        console.log("Transforming to keyframe " + frameWhen);
-        console.log(state);
         obj.addLinearTransform(state, length);
       });
     };

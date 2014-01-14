@@ -43,6 +43,7 @@ var Ide = (function($) {
     });
 
     controls.reset.click(function() {
+      stage.stop();
       stage.reset();
       stage.draw();
     });
@@ -57,6 +58,7 @@ var Ide = (function($) {
       numFrames: stage.debug.priv.ats.length + 1,
       drawPosition: 'corner',
       ats: stage.debug.priv.ats,
+      keyFrames: stage.debug.priv.keyFrames,
       ide: this
     });
 
@@ -94,7 +96,8 @@ var Timeline = function(I) {
       stage = I.target,
       scroll = 0,
       framesVisible = I.width / 10,
-      ats = I.ats;
+      ats = I.ats,
+      keyFrames = I.keyFrames;
 
   this.cursor = 0;
 
@@ -129,6 +132,10 @@ var Timeline = function(I) {
       }
       if (ats[i] !== undefined && ats[i].length > 0) {
         b.fillStyle = 'rgba(127, 127, 0, 0.5)';
+        b.fillRect(10*i, 0, 10, this.height);
+      }
+      if (keyFrames[i] !== undefined && keyFrames[i].length > 0) {
+        b.fillStyle = 'rgba(0, 127, 0, 0.5)';
         b.fillRect(10*i, 0, 10, this.height);
       }
     }

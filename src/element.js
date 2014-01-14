@@ -77,9 +77,13 @@ var Element = (function() {
       this.addLinearTransform({realWidth: w, realHeight: h}, frames);
     };
 
-    this.addLinearTransform = function(props, frames) {
+    this.addLinearTransform = function(props, frames, blocking) {
       var thisUpdate,
           startFrame = this.stage.frame;
+
+      if (blocking === undefined) {
+        blocking = false;
+      }
 
       if (isNaN(frames)) {
         frames = 1;
@@ -99,7 +103,9 @@ var Element = (function() {
           for (prop in props) {
             if (this[prop] !== undefined) {
               this[prop] += (props[prop] - this[prop]) / framesLeft;
-              thisUpdate.nextUpdate.call(this);
+              if (!blocking) {
+                thisUpdate.nextUpdate.call(this);
+              }
             }
           }
         }
