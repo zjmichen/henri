@@ -4,6 +4,8 @@ window.onload = function() {
 
   clock = clockStage.addElement(0, Clock, {width: 100, height: 200, x: 250, y:250});
 
+  clockStage.initSocket(io, 'http://localhost:3000');
+
   clockStage.addKeyFrame(50, clock, {x: 100, y: 100});
   clockStage.addKeyFrame(100, clock, {x: 300, y: 100});
   clockStage.addKeyFrame(200, clock, {x: 300, y: 100});
