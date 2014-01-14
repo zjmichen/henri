@@ -43,8 +43,9 @@ var Element = (function() {
       });
     }
 
-    this.update = function() {
-    };
+    this.init = function() { };
+
+    this.update = function() { };
 
     this.render = function() {
       var b = new Buffer(this.width, this.height);
@@ -109,6 +110,18 @@ var Element = (function() {
       thisUpdate.nextUpdate.prevUpdate = thisUpdate;
 
       this.update = thisUpdate;
+    };
+
+    this.distanceTo = function(obj) {
+      if (obj.x === undefined || obj.y === undefined) {
+        return undefined;
+      }
+
+      return Math.sqrt(Math.pow(obj.x - this.x, 2) + Math.pow(obj.y - this.y, 2));
+    };
+
+    this.serialize = function(obj) {
+      return 'asdf';
     };
 
     for (prop in I) {

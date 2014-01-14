@@ -54,6 +54,7 @@ var Stage = (function() {
       el = new ElementType(I);
 
       el.stage = this;
+      el.neighbors = priv.layers[layer].elements;
       el.removeFromStage = function() {
         priv.layers[layer].elements.splice(priv.layers[layer].elements.indexOf(el), 1);
       };
@@ -65,6 +66,8 @@ var Stage = (function() {
       }
 
       priv.layers[layer].elements.push(el);
+
+      el.init();
 
       return el;
     };
