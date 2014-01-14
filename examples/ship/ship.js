@@ -9,10 +9,10 @@ var Ship = function() {
       turnRight,
       thrust;
 
-  sprite.addImage('normal', 'ship_normal.png');
-  sprite.addImage('thrusting', 'ship_fire1.png');
-  sprite.addImage('thrusting', 'ship_fire2.png');
-  sprite.addImage('thrusting', 'ship_fire3.png');
+  sprite.addImage('normal',    'img/ship_normal.png');
+  sprite.addImage('thrusting', 'img/ship_fire1.png');
+  sprite.addImage('thrusting', 'img/ship_fire2.png');
+  sprite.addImage('thrusting', 'img/ship_fire3.png');
 
   this.update = function() {
     this.x += speed*Math.cos(direction);
