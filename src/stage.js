@@ -42,8 +42,16 @@ var Stage = (function() {
 
     backBuf = new Buffer(this.width, this.height);
 
-    this.addElement = function(layer, ElementType, I) {
+    this.addElement = function(ElementType, I, layer) {
       var el, evtName;
+
+      if (layer === undefined) {
+        layer = priv.layers.length - 1;
+      }
+
+      if (I === undefined) {
+        I = {};
+      }
 
       if (layer >= priv.layers.length) {
         priv.layers.push(new Layer(this.width, this.height));
