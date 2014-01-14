@@ -156,7 +156,7 @@ var Stage = (function() {
         });
       }
 
-      priv.socketEnabled = true;
+      this.socketEnabled = true;
     };
 
     this.update = function() {
@@ -186,17 +186,15 @@ var Stage = (function() {
 
       priv.layers.forEach(function(layer) {
         layer.elements.forEach(function(el) {
-          var x = el.x,
-              y = el.y,
-              img;
+          var img;
 
           if (this.toroidial) {
-            x = ((x % this.width) + this.width) % this.width;
-            y = ((y % this.height) + this.height) % this.height;
+            el.x = ((el.x % this.width) + this.width) % this.width;
+            el.y = ((el.y % this.height) + this.height) % this.height;
           }
 
           backBuf.save();
-          backBuf.translate(x, y);
+          backBuf.translate(el.x, el.y);
           backBuf.rotate(el.angle);
           backBuf.scale(el.scaleX, el.scaleY);
 
