@@ -50,6 +50,10 @@ var Ship = function() {
       if (evt.keyCode === 39 && actions.indexOf(turnRight) === -1) {
         actions.push(turnRight);
       }
+
+      if (evt.keyCode === 32) {
+        this.stage.socket.send('SPACE');
+      }
     },
 
     keyup: function(evt) {
