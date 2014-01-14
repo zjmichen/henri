@@ -33,7 +33,7 @@ var Debug = function(stage, priv) {
     if (this.draw.focus) {
       this.drawFocus(ctx);
     }
-  }
+  };
 
   this.drawGrid = function(ctx) {
     var width = ctx.canvas.width,

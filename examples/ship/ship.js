@@ -3,7 +3,6 @@ var Ship = function() {
       sprite = new Sprite(),
       direction = 0,
       speed = 1,
-      actions,
       accel = 0.2,
       actions = [],
       turnLeft,
