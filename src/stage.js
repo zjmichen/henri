@@ -5,6 +5,7 @@ var Stage = (function() {
         priv = {
           layers: [],
           ats: [],
+          keyFrames: [],
           events: {},
           hasFocus: false,
           loop: undefined,
@@ -96,6 +97,38 @@ var Stage = (function() {
       if (priv.ats[frameWhen] !== undefined) {
         priv.ats[frameWhen].splice(cbNum, 1);
       }
+    };
+
+    this.addKeyFrame = function(frameWhen, obj, state) {
+      var lastKeyFrame = Math.max(frameWhen - 1, 0),
+          i, frameDiff;
+
+      for (i = lastKeyFrame; i >= 0; i--) {
+        if (priv.keyFrames[i] !== undefined) {
+          break;
+        }
+        lastKeyFrame = i;
+      }
+
+      length = frameWhen - lastKeyFrame;
+
+      console.log(lastKeyFrame + ' + '  + length + ' = ' + frameWhen);
+
+      if (priv.keyFrames[frameWhen] === undefined) {
+        priv.keyFrames[frameWhen] = [];
+      }
+
+      priv.keyFrames[frameWhen].push({
+        obj: obj,
+        state: state,
+        length: length
+      });
+
+      this.at(lastKeyFrame, function() {
+        console.log("Transforming to keyframe " + frameWhen);
+        console.log(state);
+        obj.addLinearTransform(state, length);
+      });
     };
 
     this.addEventListener = function(evtName, callback) {
