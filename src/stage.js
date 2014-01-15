@@ -62,7 +62,13 @@ var Stage = (function() {
       el = new ElementType(I);
 
       el.stage = this;
-      el.neighbors = priv.layers[layer].elements;
+      Object.defineProperty(el, 'neighbors', {
+        get: function() {
+          return priv.layers[layer].elements.filter(function(neighbor) {
+            return neighbor !== el;
+          });
+        }
+      });
       el.removeFromStage = function() {
         priv.layers[layer].elements.splice(priv.layers[layer].elements.indexOf(el), 1);
       };
