@@ -68,6 +68,8 @@ var Stage = (function() {
       };
       el.type = ElementType;
       el.defaults = I;
+      el.x = el.x || 0.5*this.width;
+      el.y = el.y || 0.5*this.height;
 
       for (evtName in el.events) {
         this.addEventListener(evtName, el.events[evtName]);

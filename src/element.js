@@ -6,8 +6,6 @@ var Element = (function() {
         realWidth = 100,
         realHeight = 100;
 
-    this.x = 0;
-    this.y = 0;
     this.angle = 0;
     this.scaleX = 1;
     this.scaleY = 1;
