@@ -12,7 +12,6 @@ var Wormhole = function() {
     for (i = 0; i < this.neighbors.length; i++) {
       if (this.distanceTo(this.neighbors[i]) < 50) {
         this.stage.socket.emit('wormhole', this.neighbors[i].serialize());
-        //console.log(this.neighbors[i]);
       }
     }
   };
@@ -23,7 +22,7 @@ var Wormhole = function() {
 
   this.init = function() {
     this.stage.socket.on('wormhole', function(data) {
-      //console.log(data);
+      console.log('Wormhole: ' + data);
     });
   };
 };

@@ -8,7 +8,7 @@ window.onload = function() {
   stage.toroidial = true;
   stage.initSocket(io, 'http://localhost:3000', true);
 
-  background = stage.addElement(Space, {}, 0);
+  background = stage.addElement(Space);
   wormhole = stage.addElement(Wormhole, {x: 100, y: 100}, 1);
   ship = stage.addElement(Ship, {width: 100, height: 200, x: 250, y:250}, 1);
 
