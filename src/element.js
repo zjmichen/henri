@@ -1,6 +1,6 @@
-var Element = (function() {
+var Henri = (function(Henri) {
 
-  var ElementConstr = function(I) {
+  Henri.Element = function(I) {
     var prop,
         updates = [],
         realWidth = 100,
@@ -47,7 +47,7 @@ var Element = (function() {
     };
 
     this.render = function() {
-      var b = new Buffer(this.width, this.height);
+      var b = new Henri.Buffer(this.width, this.height);
       b.clearRect(0, 0, this.width, this.height);
       b.fillStyle = 'black';
       b.fillRect(0, 0, this.width, this.height);
@@ -122,5 +122,5 @@ var Element = (function() {
     }
   };
 
-  return ElementConstr;
-})();
+  return Henri;
+})(Henri || {});

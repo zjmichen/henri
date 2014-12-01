@@ -1,138 +1,149 @@
-var Buffer = function(width, height) {
-  return (function(width, height) {
-    var buffer = document.createElement('canvas');
-    buffer.width = width;
-    buffer.height = height;
-    return buffer.getContext('2d');
-  })(width, height);
-};var Debug = function(stage, priv) {
-  var eventDrawQ = [];
+var Henri = (function(Henri) {
 
-  this.draw = {
-    grid: false,
-    outlines: false,
-    focus: false,
-    framecount: false,
-    events: false,
+  Henri.Buffer = function(width, height) {
+    return (function(width, height) {
+      var buffer = document.createElement('canvas');
+      buffer.width = width;
+      buffer.height = height;
+      return buffer.getContext('2d');
+    })(width, height);
   };
 
-  this.priv = priv;
+  return Henri;
 
-  this.stage = stage;
+})(Henri || {});var Henri = (function(Henri) {
 
-  this.addEvent = function(x, y) {
-    eventDrawQ.push({x: x, y: y, ttl: 50});
-  };
+  Henri.Debug = function(stage, priv) {
+    var eventDrawQ = [];
 
-  this.drawBelow = function(ctx) {
-    if (this.draw.grid) {
-      this.drawGrid(ctx);
-    }
-  };
+    this.draw = {
+      grid: false,
+      outlines: false,
+      focus: false,
+      framecount: false,
+      events: false,
+    };
 
-  this.drawAbove = function(ctx) {
-    if (this.draw.framecount) {
-      this.drawFramecount(ctx, this.stage.frame);
-    }
-    if (this.draw.events) {
-      this.drawEvents(ctx);
-    }
-    if (this.draw.focus) {
-      this.drawFocus(ctx);
-    }
-  }
+    this.priv = priv;
 
-  this.drawGrid = function(ctx) {
-    var width = ctx.canvas.width,
-        height = ctx.canvas.height,
-        tenColor = 'rgba(127, 127, 255, 0.5)',
-        fiftyColor = 'rgba(0, 0, 255, 0.5)',
-        hundredColor = 'rgba(0, 0, 255, 0.8)';
+    this.stage = stage;
 
-    for (i = 0; i < width; i+=10) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = tenColor;
+    this.addEvent = function(x, y) {
+      eventDrawQ.push({x: x, y: y, ttl: 50});
+    };
 
-      if (i % 50 === 0) {
-        ctx.strokeStyle = fiftyColor;
+    this.drawBelow = function(ctx) {
+      if (this.draw.grid) {
+        this.drawGrid(ctx);
       }
-      if (i % 100 === 0) {
-        ctx.strokeStyle = hundredColor;
+    };
+
+    this.drawAbove = function(ctx) {
+      if (this.draw.framecount) {
+        this.drawFramecount(ctx, this.stage.frame);
       }
-
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i, height);
-
-      ctx.stroke();
-      ctx.restore();
+      if (this.draw.events) {
+        this.drawEvents(ctx);
+      }
+      if (this.draw.focus) {
+        this.drawFocus(ctx);
+      }
     }
 
-    for (i = 0; i < height; i += 10) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = tenColor;
+    this.drawGrid = function(ctx) {
+      var width = ctx.canvas.width,
+          height = ctx.canvas.height,
+          tenColor = 'rgba(127, 127, 255, 0.5)',
+          fiftyColor = 'rgba(0, 0, 255, 0.5)',
+          hundredColor = 'rgba(0, 0, 255, 0.8)';
 
-      if (i % 50 === 0) {
-        ctx.strokeStyle = fiftyColor;
-      }
-      if (i % 100 === 0) {
-        ctx.strokeStyle = hundredColor;
+      for (i = 0; i < width; i+=10) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = tenColor;
+
+        if (i % 50 === 0) {
+          ctx.strokeStyle = fiftyColor;
+        }
+        if (i % 100 === 0) {
+          ctx.strokeStyle = hundredColor;
+        }
+
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+
+        ctx.stroke();
+        ctx.restore();
       }
 
-      ctx.moveTo(0, i);
-      ctx.lineTo(width, i);
+      for (i = 0; i < height; i += 10) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = tenColor;
 
-      ctx.stroke();
-      ctx.restore();
-    }
-  };
+        if (i % 50 === 0) {
+          ctx.strokeStyle = fiftyColor;
+        }
+        if (i % 100 === 0) {
+          ctx.strokeStyle = hundredColor;
+        }
 
-  this.drawFocus = function(ctx) {
-    if (priv.hasFocus) {
-      ctx.strokeStyle = 'rgba(255, 255, 0, 0.6)';
-    } else {
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
-    }
-    ctx.lineWidth = 4;
-    ctx.strokeRect(0, 0, this.stage.width, this.stage.height);
-  };
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
 
-  this.drawFramecount = function(ctx, frame) {
-    ctx.font = '18px sans-serif';
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.textBaseline = 'top';
-    ctx.fillText(frame, 8, 8);
-  };
-
-  this.drawEvents = function(ctx) {
-    eventDrawQ.forEach(function(p) {
-      var opacity = p.ttl / 50;
-      ctx.beginPath();
-      ctx.fillStyle = 'rgba(200, 135, 135, ' + opacity + ')';
-      ctx.arc(p.x, p.y, 5, 0, 2*Math.PI);
-      ctx.fill();
-
-      p.ttl--;
-      if (p.ttl <= 0) {
-        eventDrawQ.splice(p, 1);
+        ctx.stroke();
+        ctx.restore();
       }
-    });
+    };
+
+    this.drawFocus = function(ctx) {
+      if (priv.hasFocus) {
+        ctx.strokeStyle = 'rgba(255, 255, 0, 0.6)';
+      } else {
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      }
+      ctx.lineWidth = 4;
+      ctx.strokeRect(0, 0, this.stage.width, this.stage.height);
+    };
+
+    this.drawFramecount = function(ctx, frame) {
+      ctx.font = '18px sans-serif';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.textBaseline = 'top';
+      ctx.fillText(frame, 8, 8);
+    };
+
+    this.drawEvents = function(ctx) {
+      eventDrawQ.forEach(function(p) {
+        var opacity = p.ttl / 50;
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(200, 135, 135, ' + opacity + ')';
+        ctx.arc(p.x, p.y, 5, 0, 2*Math.PI);
+        ctx.fill();
+
+        p.ttl--;
+        if (p.ttl <= 0) {
+          eventDrawQ.splice(p, 1);
+        }
+      });
+    };
+
+    this.drawOutline = function(ctx, el, img) {
+      ctx.lineWidth = 2 / el.scale;
+      ctx.strokeStyle = 'rgba(255, 100, 0, 0.6)';
+      ctx.strokeRect(0, 0, img.width, img.height);
+    };
   };
 
-  this.drawOutline = function(ctx, el, img) {
-    ctx.lineWidth = 2 / el.scale;
-    ctx.strokeStyle = 'rgba(255, 100, 0, 0.6)';
-    ctx.strokeRect(0, 0, img.width, img.height);
-  };
+  return Henri;
 
-};
-var Element = (function() {
+})(Henri || {});
+var Henri = (function(Henri) {
 
-  var ElementConstr = function(I) {
+  Henri.Element = function(I) {
     var prop,
         updates = [],
         realWidth = 100,
@@ -179,7 +190,7 @@ var Element = (function() {
     };
 
     this.render = function() {
-      var b = new Buffer(this.width, this.height);
+      var b = new Henri.Buffer(this.width, this.height);
       b.clearRect(0, 0, this.width, this.height);
       b.fillStyle = 'black';
       b.fillRect(0, 0, this.width, this.height);
@@ -254,18 +265,23 @@ var Element = (function() {
     }
   };
 
-  return ElementConstr;
-})();
-function Layer(width, height) {
-  this.buffer = new Buffer(width, height);
-  this.elements = [];
-  this.width = width;
-  this.height = height;
-}
-var Sprite = (function() {
-  var blankBuffer = new Buffer(1, 1);
+  return Henri;
+})(Henri || {});
+var Henri = (function(Henri) {
 
-  return function() {
+  Henri.Layer = function(width, height) {
+    this.buffer = new Henri.Buffer(width, height);
+    this.elements = [];
+    this.width = width;
+    this.height = height;
+  };
+
+  return Henri;
+})(Henri || {});
+var Henri = (function(Henri) {
+  var blankBuffer = new Henri.Buffer(1, 1);
+
+  Henri.Sprite = function() {
     var modes = { normal: [] },
         mode = 'normal',
         frame = 0,
@@ -312,10 +328,12 @@ var Sprite = (function() {
     };
   };
 
-})();
-var Stage = (function() {
+  return Henri;
 
-  var StageConstr = function(canvas, debugEnabled) {
+})(Henri || {});
+var Henri = (function(Henri) {
+
+  Henri.Stage = function(canvas, debugEnabled) {
     var that = this,
         priv = {
           layers: [],
@@ -338,12 +356,12 @@ var Stage = (function() {
     this.toroidial = false;
     this.running = false;
 
-    debug = new Debug(this, priv);
+    debug = new Henri.Debug(this, priv);
     if (debugEnabled) {
       this.debug = debug;
     }
 
-    priv.layers.push(new Layer(this.width, this.height));
+    priv.layers.push(new Henri.Layer(this.width, this.height));
 
     document.addEventListener('click', function(evt) {
       if (evt.target === canvas) {
@@ -353,17 +371,17 @@ var Stage = (function() {
       }
     });
 
-    backBuf = new Buffer(this.width, this.height);
+    backBuf = new Henri.Buffer(this.width, this.height);
 
     this.addElement = function(layer, ElementType, I) {
       var el, evtName;
 
       if (layer >= priv.layers.length) {
-        priv.layers.push(new Layer(this.width, this.height));
+        priv.layers.push(new Henri.Layer(this.width, this.height));
         layer = priv.layers.length - 1;
       }
 
-      ElementType.prototype = new Element(I);
+      ElementType.prototype = new Henri.Element(I);
       el = new ElementType(I);
 
       el.stage = this;
@@ -576,5 +594,5 @@ var Stage = (function() {
 
   };
 
-  return StageConstr;
-})();
+  return Henri;
+})(Henri || {});

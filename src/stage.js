@@ -1,6 +1,6 @@
-var Stage = (function() {
+var Henri = (function(Henri) {
 
-  var StageConstr = function(canvas, debugEnabled) {
+  Henri.Stage = function(canvas, debugEnabled) {
     var that = this,
         priv = {
           layers: [],
@@ -23,12 +23,12 @@ var Stage = (function() {
     this.toroidial = false;
     this.running = false;
 
-    debug = new Debug(this, priv);
+    debug = new Henri.Debug(this, priv);
     if (debugEnabled) {
       this.debug = debug;
     }
 
-    priv.layers.push(new Layer(this.width, this.height));
+    priv.layers.push(new Henri.Layer(this.width, this.height));
 
     document.addEventListener('click', function(evt) {
       if (evt.target === canvas) {
@@ -38,17 +38,17 @@ var Stage = (function() {
       }
     });
 
-    backBuf = new Buffer(this.width, this.height);
+    backBuf = new Henri.Buffer(this.width, this.height);
 
     this.addElement = function(layer, ElementType, I) {
       var el, evtName;
 
       if (layer >= priv.layers.length) {
-        priv.layers.push(new Layer(this.width, this.height));
+        priv.layers.push(new Henri.Layer(this.width, this.height));
         layer = priv.layers.length - 1;
       }
 
-      ElementType.prototype = new Element(I);
+      ElementType.prototype = new Henri.Element(I);
       el = new ElementType(I);
 
       el.stage = this;
@@ -261,5 +261,5 @@ var Stage = (function() {
 
   };
 
-  return StageConstr;
-})();
+  return Henri;
+})(Henri || {});

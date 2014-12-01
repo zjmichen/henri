@@ -1,7 +1,7 @@
-var Sprite = (function() {
-  var blankBuffer = new Buffer(1, 1);
+var Henri = (function(Henri) {
+  var blankBuffer = new Henri.Buffer(1, 1);
 
-  return function() {
+  Henri.Sprite = function() {
     var modes = { normal: [] },
         mode = 'normal',
         frame = 0,
@@ -48,4 +48,6 @@ var Sprite = (function() {
     };
   };
 
-})();
+  return Henri;
+
+})(Henri || {});
