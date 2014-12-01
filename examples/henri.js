@@ -154,7 +154,7 @@ var Henri = (function(Henri) {
     this.angle = 0;
     this.scaleX = 1;
     this.scaleY = 1;
-    this.drawPosition = 'center';
+    this.drawPosition = 'corner';
     this.width = 100;
     this.height = 100;
     if (this.realWidth === undefined) {
@@ -402,15 +402,22 @@ var Henri = (function(Henri) {
 
     this.start = function() {
       var that = this,
-          delay = 1000 / this.frameRate;
+          update = this.update,
+          draw = this.draw;
 
-      if (this.running === false) {
-        priv.loop = setInterval(function() {
-          that.update();
-          that.draw();
-        }, delay);
+      var mainLoop = function(ts) {
+        update(ts);
+        draw();
+
+        if (that.running) {
+          requestAnimationFrame(mainLoop);
+        }
+      };
+
+      if (!this.running) {
+        this.running = true;
+        requestAnimationFrame(mainLoop);
       }
-      this.running = true;
     };
 
     this.stop = function() {
@@ -474,16 +481,16 @@ var Henri = (function(Henri) {
       priv.events[evtName].push(callback);
     };
 
-    this.update = function() {
+    this.update = function(ts) {
       if (priv.ats[this.frame] !== undefined) {
         priv.ats[this.frame].forEach(function(callback) {
-          callback();
+          callback(ts);
         });
       }
 
       priv.layers.forEach(function(layer) {
         layer.elements.forEach(function(el) {
-          el.update();
+          el.update(ts);
         });
       });
 
