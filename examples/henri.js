@@ -143,6 +143,13 @@ var Henri = (function(Henri) {
 })(Henri || {});
 var Henri = (function(Henri) {
 
+  Henri.defaults = {
+    drawPosition: 'corner'
+  };
+
+  return Henri;
+})(Henri || {});var Henri = (function(Henri) {
+
   Henri.Element = function(I) {
     var prop,
         updates = [],
@@ -154,7 +161,7 @@ var Henri = (function(Henri) {
     this.angle = 0;
     this.scaleX = 1;
     this.scaleY = 1;
-    this.drawPosition = 'corner';
+    this.drawPosition = Henri.defaults.drawPosition;
     this.width = 100;
     this.height = 100;
     if (this.realWidth === undefined) {
@@ -557,7 +564,7 @@ var Henri = (function(Henri) {
     this.reset = function() {
       priv.layers.forEach(function(layer, layerNum) {
         layer.elements.forEach(function(el) {
-          Element.call(el, el.defaults);
+          Henri.Element.call(el, el.defaults);
           el.type.call(el, el.defaults);
         });
       });

@@ -48,9 +48,9 @@ var Ide = (function($) {
       stage.draw();
     });
 
-    timelineStage = new Stage(timelineCanvas, {});
+    timelineStage = new Henri.Stage(timelineCanvas, {});
     timelineStage.addElement(0, Timeline, {
-      width: timelineCanvas.width, 
+      width: timelineCanvas.width,
       height: timelineCanvas.height,
       x: 0,
       y: 0,
@@ -91,7 +91,7 @@ var Ide = (function($) {
 })(jQuery);
 
 var Timeline = function(I) {
-  var b = new Buffer(10*I.numFrames, I.height),
+  var b = new Henri.Buffer(10*I.numFrames, I.height),
       that = this,
       stage = I.target,
       scroll = 0,

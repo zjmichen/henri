@@ -1,6 +1,8 @@
 window.onload = function() {
-  var clockStage = new Stage(document.getElementById('clock'), true),
+  var clockStage = new Henri.Stage(document.getElementById('clock'), true),
       clock;
+
+  Henri.defaults.drawPosition = 'center';
 
   clock = clockStage.addElement(0, Clock, {width: 100, height: 200, x: 250, y:250});
 

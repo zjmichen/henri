@@ -11,7 +11,7 @@ var Henri = (function(Henri) {
     this.angle = 0;
     this.scaleX = 1;
     this.scaleY = 1;
-    this.drawPosition = 'corner';
+    this.drawPosition = Henri.defaults.drawPosition;
     this.width = 100;
     this.height = 100;
     if (this.realWidth === undefined) {

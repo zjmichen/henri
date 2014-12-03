@@ -10,15 +10,15 @@ var Clock = (function() {
     this.realWidth = (I.width === undefined) ? width : I.width;
     this.realHeight = (I.height === undefined) ? height : I.height;
     aspectRatio = this.height / this.width;
-    buffer = new Buffer(this.width, this.height);
-    stage = new Stage(buffer.canvas);
+    buffer = new Henri.Buffer(this.width, this.height);
+    stage = new Henri.Stage(buffer.canvas);
 
     for (i = 0; i < 12; i++) {
       n = stage.addElement(0, Numeral, {value: i+1});
 
-      n.x = 0.5*(stage.width - n.width) * 
+      n.x = 0.5*(stage.width - n.width) *
           Math.sin( (i+1) / 12 * 2*Math.PI) + 0.5*stage.width;
-      n.y = -0.5*(stage.height - n.height) * 
+      n.y = -0.5*(stage.height - n.height) *
           Math.cos( (i+1) / 12 * 2*Math.PI) + 0.5*stage.height;
     }
 
@@ -79,7 +79,7 @@ var Clock = (function() {
   }
 
   var Numeral = function(I) {
-    var b = new Buffer(50, 50);
+    var b = new Henri.Buffer(50, 50);
     this.value = I.value || 0;
     this.y = 100;
     this.width = 50;
@@ -96,7 +96,7 @@ var Clock = (function() {
     this.angle = -0.5*Math.PI;
 
     this.render = function() {
-      var b = new Buffer(this.width, this.height);
+      var b = new Henri.Buffer(this.width, this.height);
 
       b.fillRect(0.5*this.width, 0, 0.5*this.width, this.height);
 
