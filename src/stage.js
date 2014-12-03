@@ -224,7 +224,7 @@ var Henri = (function(Henri) {
     this.reset = function() {
       priv.layers.forEach(function(layer, layerNum) {
         layer.elements.forEach(function(el) {
-          Element.call(el, el.defaults);
+          Henri.Element.call(el, el.defaults);
           el.type.call(el, el.defaults);
         });
       });
